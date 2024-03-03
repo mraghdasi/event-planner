@@ -7,6 +7,7 @@ from main import views as ma
 
 urlpatterns = [
                   path('admin/', admin.site.urls),
-                  path('', ma.homepage, name='homepage')
+                  path('', ma.homepage, name='homepage'),
+                  path('more/', ma.more, name='more'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) \
               + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
