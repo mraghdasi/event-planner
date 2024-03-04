@@ -1,14 +1,8 @@
 from django.shortcuts import render
 
-from account.models import Profile
+from account.models import User
 
 
-def master(request):
-    try:
-        p = Profile.objects.get(username=request.user.username)
-        return {'profile': p}
-    except Exception as e:
-        return {}
 
 
 def more(request):

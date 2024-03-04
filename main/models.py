@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
@@ -22,7 +23,7 @@ class Meeting(models.Model):
 
 
 class CommentRoom(models.Model):
-    user = models.ForeignKey('account.Profile', related_name='comments', on_delete=models.CASCADE)
+    user = models.ForeignKey(get_user_model(), related_name='comments', on_delete=models.CASCADE)
     room = models.ForeignKey('main.Room', related_name='comments', on_delete=models.CASCADE)
     body = models.TextField()
     rate = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])

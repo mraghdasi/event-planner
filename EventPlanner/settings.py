@@ -16,11 +16,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'account',
-    'main',
+    # 3rd apps
     'django.contrib.humanize',
     'django_cleanup.apps.CleanupConfig',
     'image_optimizer',
+    # local apps
+    'account',
+    'main',
 ]
 
 MIDDLEWARE = [
@@ -46,7 +48,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'main.views.master'
+                'utils.templates.context_processors.user_profile'
             ],
         },
     },
@@ -75,6 +77,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+AUTH_USER_MODEL = 'account.User'
 
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Asia/Tehran'

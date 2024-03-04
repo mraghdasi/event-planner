@@ -3,7 +3,7 @@ from django.contrib import admin
 from account.models import *
 
 
-@admin.register(Profile)
+@admin.register(User)
 class ProfileAdmin(admin.ModelAdmin):
     list_display = search_fields = ('username', 'first_name', 'last_name', 'email', 'phone_number', 'role')
     list_filter = ('role',)
