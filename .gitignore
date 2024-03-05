@@ -164,4 +164,7 @@ idea/
 
 ./test_file_temp.py
 test_file_temp.py
-media/
+media/home_media/
+media/meetings_media/
+media/shared_media/
+media/users_media/
