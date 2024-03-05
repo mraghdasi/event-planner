@@ -3,7 +3,7 @@ from django.test import TestCase
 from .models import User, Team
 
 
-class ProfileAndTeamTests(TestCase):
+class UserAndTeamTests(TestCase):
     def setUp(self):
         # Create 2 teams
         self.team1 = Team.objects.create(title='Team 1', is_active=True)
@@ -13,16 +13,16 @@ class ProfileAndTeamTests(TestCase):
         self.users = []
         for i in range(10):
             if i < 4:
-                user = User.objects.create(username=f"user{i}", phone_number='1234567890', team=self.team1, role='u')
+                user = User.objects.create(username=f"user{i}", phone_number='1234567890', team=self.team1)
             elif 4 <= i < 7:
-                user = User.objects.create(username=f"user{i}", phone_number='1234567890', team=self.team2, role='u')
+                user = User.objects.create(username=f"user{i}", phone_number='1234567890', team=self.team2)
             else:
-                user = User.objects.create(username=f"user{i}", phone_number='1234567890', role='u')
+                user = User.objects.create(username=f"user{i}", phone_number='1234567890')
             self.users.append(user)
         self.users.append(
-            User.objects.create(username='user10', phone_number='1234567890', team=self.team1, role='l'))
+            User.objects.create(username='user10', phone_number='1234567890', team=self.team1, is_lead=True))
         self.users.append(
-            User.objects.create(username='user11', phone_number='1234567890', team=self.team2, role='l'))
+            User.objects.create(username='user11', phone_number='1234567890', team=self.team2, is_lead=True))
 
     def test_user_and_team_creation(self):
         # Check if 10 users and 2 teams are created
@@ -65,9 +65,9 @@ class ProfileAndTeamTests(TestCase):
 
     def test_get_lead(self):
         # Test for reading team leads
-        self.assertEqual(User.objects.filter(role='l').count(), 2)
+        self.assertEqual(User.objects.filter(is_lead=True).count(), 2)
 
     def test_get_leads_by_team(self):
         # Test getting team leads for each team
-        self.assertEqual(User.objects.get(role='l', team=self.team1).username, 'user10')
-        self.assertEqual(User.objects.get(role='l', team=self.team2).username, 'user11')
+        self.assertEqual(User.objects.get(is_lead=True, team=self.team1).username, 'user10')
+        self.assertEqual(User.objects.get(is_lead=True, team=self.team2).username, 'user11')

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from main.models import *
+from meetings.models import *
 
 
 @admin.register(Room)

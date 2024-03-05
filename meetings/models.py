@@ -14,7 +14,7 @@ class Room(models.Model):
 class Meeting(models.Model):
     title = models.CharField(max_length=255)
     team = models.ForeignKey('users.Team', related_name='meetings', on_delete=models.CASCADE)
-    room = models.ForeignKey('main.Room', related_name='meetings', on_delete=models.CASCADE)
+    room = models.ForeignKey('meetings.Room', related_name='meetings', on_delete=models.CASCADE)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
 
@@ -24,7 +24,7 @@ class Meeting(models.Model):
 
 class CommentRoom(models.Model):
     user = models.ForeignKey(get_user_model(), related_name='comments', on_delete=models.CASCADE)
-    room = models.ForeignKey('main.Room', related_name='comments', on_delete=models.CASCADE)
+    room = models.ForeignKey('meetings.Room', related_name='comments', on_delete=models.CASCADE)
     body = models.TextField()
     rate = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
 

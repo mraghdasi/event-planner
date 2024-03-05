@@ -7,7 +7,7 @@ class User(AbstractUser):
     image = OptimizedImageField(upload_to='User', optimized_image_output_size=(32, 32),
                                 optimized_image_resize_method='cover', null=True, blank=True)
     phone_number = models.CharField(max_length=11)
-    team = models.ForeignKey('account.Team', related_name='members', on_delete=models.SET_NULL, null=True, blank=True)
+    team = models.ForeignKey('users.Team', related_name='members', on_delete=models.SET_NULL, null=True, blank=True)
     is_lead = models.BooleanField(default=False)
 
     def __str__(self):

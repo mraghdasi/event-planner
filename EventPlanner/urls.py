@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.urls import path
 from django.urls import include
 
-from config import settings
+from EventPlanner import settings
 
 urlpatterns = [
                   path('admin/', admin.site.urls),
