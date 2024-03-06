@@ -23,6 +23,8 @@ INSTALLED_APPS = [
     # local apps
     'users',
     'meetings',
+    'admin_dash',
+
 ]
 
 MIDDLEWARE = [
