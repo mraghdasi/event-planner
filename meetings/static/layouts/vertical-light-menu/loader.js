@@ -9,7 +9,7 @@ window.addEventListener("load", function(){
         localStorage.clear()
     }
 
-    if (localStorage.length === 2) {
+    if (localStorage.length <= 2) {
         corkThemeObject = settingsObject;
     } else {
 

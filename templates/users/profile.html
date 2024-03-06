@@ -1,0 +1,277 @@
+{% extends 'base.html' %}
+
+{% block metadata %}
+    <title>Profile</title>
+    <!--
+    Custom Head Elements (Like Styles)
+    ========================================
+    If You Want To Add Something To Head Tag Put it Below Of This Comment
+    ========================================
+    -->
+
+{% endblock %}
+
+{% block breadcrumb %}
+    <!--
+    Customize Below Code For Your Page
+    ========================================
+    First Li Represents Main App (Most of The Times)
+    Second One Is Name Of Page
+    ========================================
+    -->
+
+    <nav class="breadcrumb-style-one" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Users</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Profile</li>
+        </ol>
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <!--
+    Content Section Finding in .html Files
+    ========================================
+    For Template Pages, Put Child Elements of *STAR* Div, Below Of This Comment
+    *STAR* = <div class="row layout-top-spacing">
+    Note: Search Above Div in Page You Are Working With
+    ========================================
+    -->
+
+    <div class="account-content">
+
+
+        <div class="tab-content" id="animateLineContent-4">
+            <div class="tab-pane fade active show" id="animated-underline-home" role="tabpanel"
+                 aria-labelledby="animated-underline-home-tab">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 layout-spacing">
+                        <form class="section general-info" method="post" action="{% url 'edit_profile_api' %}"
+                              onsubmit="return send_req(this)">
+                            {% csrf_token %}
+                            <div class="info">
+                                <h6 class="">Profile Information</h6>
+                                <div class="row">
+                                    <div class="col-lg-11 mx-auto">
+                                        <div class="row">
+                                            <div class="col-xl-2 col-lg-12 col-md-4">
+                                                <div class="profile-image  mt-4 pe-md-4">
+                                                    <div class="img-uploader-content">
+                                                        <input type="file" class="filepond"
+                                                               accept="image/png, image/jpeg" name="image">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-10 col-lg-12 col-md-8 mt-md-0 mt-4">
+                                                <div class="form">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="username_input">Username</label>
+                                                                <input type="text" class="form-control mb-3"
+                                                                       id="username_input"
+                                                                       value="{{ request.user.username }}"
+                                                                       name="username" required>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="first_name">First Name</label>
+                                                                <input type="text" class="form-control mb-3"
+                                                                       id="first_name"
+                                                                       value="{{ request.user.first_name }}"
+                                                                       name="first_name" required>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="last_name">Last Name</label>
+                                                                <input type="text" class="form-control mb-3"
+                                                                       id="last_name"
+                                                                       value="{{ request.user.last_name }}"
+                                                                       name="last_name" required>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="email">Email</label>
+                                                                <input type="email" class="form-control mb-3" id="email"
+                                                                       value="{{ request.user.email }}" name="email"
+                                                                       required>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="phone_number">Phone Number</label>
+                                                                <input type="tel" class="form-control mb-3"
+                                                                       id="phone_number"
+                                                                       value="{{ request.user.phone_number }}"
+                                                                       name="phone_number" required>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="team_title">Team</label>
+                                                                <input type="text" class="form-control mb-3"
+                                                                       id="team_title"
+                                                                       value="{{ request.user.team.title }}" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12 mt-1">
+                                                            <div class="form-group text-end">
+                                                                <button type="submit" class="btn btn-secondary">Save
+                                                                </button>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="card style-4 col-4">
+                <div class="card-body pt-3">
+
+                    <div class="media mt-0 mb-3">
+                        <div class="">
+                            <div class="avatar avatar-md avatar-indicators avatar-online me-3">
+                                <img alt="avatar" src="assets/img/profile-2.jpeg" class="rounded-circle">
+                            </div>
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading mb-0">Kelly Young</h4>
+                            <p class="media-text">Project Manager</p>
+                        </div>
+                    </div>
+                    <p class="card-text mt-4 mb-0">Powerful CRM admin dashboard template based on Bootstrap and Sass for
+                        all kind of back-end projects.</p>
+                </div>
+                <div class="card-footer pt-0 border-0 text-center">
+                    <a href="javascript:void(0);" class="btn btn-secondary w-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="feather feather-slack">
+                            <path d="M14.5 10c-.83 0-1.5-.67-1.5-1.5v-5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5z"></path>
+                            <path d="M20.5 10H19V8.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"></path>
+                            <path d="M9.5 14c.83 0 1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5S8 21.33 8 20.5v-5c0-.83.67-1.5 1.5-1.5z"></path>
+                            <path d="M3.5 14H5v1.5c0 .83-.67 1.5-1.5 1.5S2 16.33 2 15.5 2.67 14 3.5 14z"></path>
+                            <path d="M14 14.5c0-.83.67-1.5 1.5-1.5h5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-5c-.83 0-1.5-.67-1.5-1.5z"></path>
+                            <path d="M15.5 19H14v1.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"></path>
+                            <path d="M10 9.5C10 8.67 9.33 8 8.5 8h-5C2.67 8 2 8.67 2 9.5S2.67 11 3.5 11h5c.83 0 1.5-.67 1.5-1.5z"></path>
+                            <path d="M8.5 5H10V3.5C10 2.67 9.33 2 8.5 2S7 2.67 7 3.5 7.67 5 8.5 5z"></path>
+                        </svg>
+                        <span class="btn-text-inner ms-3">Join her on Slack</span></a>
+                </div>
+            </div>
+            <div class="card style-4 col-4">
+                <div class="card-body pt-3">
+
+                    <div class="media mt-0 mb-3">
+                        <div class="">
+                            <div class="avatar avatar-md avatar-indicators avatar-online me-3">
+                                <img alt="avatar" src="assets/img/profile-2.jpeg" class="rounded-circle">
+                            </div>
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading mb-0">Kelly Young</h4>
+                            <p class="media-text">Project Manager</p>
+                        </div>
+                    </div>
+                    <p class="card-text mt-4 mb-0">Powerful CRM admin dashboard template based on Bootstrap and Sass for
+                        all kind of back-end projects.</p>
+                </div>
+                <div class="card-footer pt-0 border-0 text-center">
+                    <a href="javascript:void(0);" class="btn btn-secondary w-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="feather feather-slack">
+                            <path d="M14.5 10c-.83 0-1.5-.67-1.5-1.5v-5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5z"></path>
+                            <path d="M20.5 10H19V8.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"></path>
+                            <path d="M9.5 14c.83 0 1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5S8 21.33 8 20.5v-5c0-.83.67-1.5 1.5-1.5z"></path>
+                            <path d="M3.5 14H5v1.5c0 .83-.67 1.5-1.5 1.5S2 16.33 2 15.5 2.67 14 3.5 14z"></path>
+                            <path d="M14 14.5c0-.83.67-1.5 1.5-1.5h5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-5c-.83 0-1.5-.67-1.5-1.5z"></path>
+                            <path d="M15.5 19H14v1.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"></path>
+                            <path d="M10 9.5C10 8.67 9.33 8 8.5 8h-5C2.67 8 2 8.67 2 9.5S2.67 11 3.5 11h5c.83 0 1.5-.67 1.5-1.5z"></path>
+                            <path d="M8.5 5H10V3.5C10 2.67 9.33 2 8.5 2S7 2.67 7 3.5 7.67 5 8.5 5z"></path>
+                        </svg>
+                        <span class="btn-text-inner ms-3">Join her on Slack</span></a>
+                </div>
+            </div>
+            <div class="card style-4 col-4">
+                <div class="card-body pt-3">
+
+                    <div class="media mt-0 mb-3">
+                        <div class="">
+                            <div class="avatar avatar-md avatar-indicators avatar-online me-3">
+                                <img alt="avatar" src="assets/img/profile-2.jpeg" class="rounded-circle">
+                            </div>
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading mb-0">Kelly Young</h4>
+                            <p class="media-text">Project Manager</p>
+                        </div>
+                    </div>
+                    <p class="card-text mt-4 mb-0">Powerful CRM admin dashboard template based on Bootstrap and Sass for
+                        all kind of back-end projects.</p>
+                </div>
+                <div class="card-footer pt-0 border-0 text-center">
+                    <a href="javascript:void(0);" class="btn btn-secondary w-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="feather feather-slack">
+                            <path d="M14.5 10c-.83 0-1.5-.67-1.5-1.5v-5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5z"></path>
+                            <path d="M20.5 10H19V8.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"></path>
+                            <path d="M9.5 14c.83 0 1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5S8 21.33 8 20.5v-5c0-.83.67-1.5 1.5-1.5z"></path>
+                            <path d="M3.5 14H5v1.5c0 .83-.67 1.5-1.5 1.5S2 16.33 2 15.5 2.67 14 3.5 14z"></path>
+                            <path d="M14 14.5c0-.83.67-1.5 1.5-1.5h5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-5c-.83 0-1.5-.67-1.5-1.5z"></path>
+                            <path d="M15.5 19H14v1.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"></path>
+                            <path d="M10 9.5C10 8.67 9.33 8 8.5 8h-5C2.67 8 2 8.67 2 9.5S2.67 11 3.5 11h5c.83 0 1.5-.67 1.5-1.5z"></path>
+                            <path d="M8.5 5H10V3.5C10 2.67 9.33 2 8.5 2S7 2.67 7 3.5 7.67 5 8.5 5z"></path>
+                        </svg>
+                        <span class="btn-text-inner ms-3">Join her on Slack</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <!--
+    Custom Scripts
+    ========================================
+    You Can Add Some JavaScript Code After All Other Js Codes
+
+    Example1 - Code Below, Must Be Paste Below This Comment:
+    <script>console.log("Hello World!")</script>
+    ========================================
+    -->
+
+
+    <script>
+        function send_req(oFormElement) {
+            const xhr = new XMLHttpRequest()
+            xhr.onload = function () {
+                const jsonResponse = JSON.parse(xhr.responseText)
+                if (xhr.status === 200) {
+                    window.location.reload()
+                } else {
+                    alert(jsonResponse.msg)
+                }
+            } // success case
+
+            xhr.open(oFormElement.method, oFormElement.action, true)
+            xhr.send(new FormData(oFormElement))
+            return false
+        }
+    </script>
+{% endblock %}
