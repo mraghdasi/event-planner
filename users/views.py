@@ -3,6 +3,10 @@ from django.http import JsonResponse
 from django.shortcuts import render
 
 
+def sign_up(request):
+    return render(request, 'users/signup.html', {})
+
+
 @login_required
 def profile(request):
     return render(request, 'users/profile.html', {})

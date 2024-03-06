@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block metadata %}
+    <title>Example Page</title>
+    <!--
+    Custom Head Elements (Like Styles)
+    ========================================
+    If You Want To Add Something To Head Tag Put it Below Of This Comment
+    ========================================
+    -->
+
+{% endblock %}
+
+{% block breadcrumb %}
+    <!--
+    Customize Below Code For Your Page
+    ========================================
+    First Li Represents Main App (Most of The Times)
+    Second One Is Name Of Page
+    ========================================
+    -->
+
+    <nav class="breadcrumb-style-one" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Main</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Example</li>
+        </ol>
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <!--
+    Content Section Finding in .html Files
+    ========================================
+    For Template Pages, Put Child Elements of *STAR* Div, Below Of This Comment
+    *STAR* = <div class="row layout-top-spacing">
+    Note: Search Above Div in Page You Are Working With
+    ========================================
+    -->
+
+{% endblock %}
+
+{% block scripts %}
+    <!--
+    Custom Scripts
+    ========================================
+    You Can Add Some JavaScript Code After All Other Js Codes
+
+    Example1 - Code Below, Must Be Paste Below This Comment:
+    <script>console.log("Hello World!")</script>
+    ========================================
+    -->
+{% endblock %}
