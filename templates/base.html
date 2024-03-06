@@ -9,6 +9,10 @@
     <link rel="icon" type="image/x-icon" href="{% static '/src/assets/favicon.ico' %}"/>
     <link href="{% static '/layouts/vertical-light-menu/css/light/loader.css' %}" rel="stylesheet" type="text/css"/>
     <link href="{% static '/layouts/vertical-light-menu/css/dark/loader.css' %}" rel="stylesheet" type="text/css"/>
+
+    <script src="{% static '/tailwind/tailwind.config.js' %}"></script>
+
+
     <script>
         var layoutName = 'Vertical Light Menu';
 
@@ -43,6 +47,11 @@
     <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->
 
     <style>
+        a.disabled {
+            pointer-events: none;
+            cursor: default;
+        }
+
         body.dark .layout-px-spacing, .layout-px-spacing {
             min-height: calc(100vh - 155px) !important;
         }
@@ -54,6 +63,9 @@
     </style>
     {% block metadata %}
     {% endblock %}
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
+
 </head>
 <body class="layout-boxed">
 
@@ -73,13 +85,13 @@
 
         <ul class="navbar-item theme-brand flex-row  text-center">
             <li class="nav-item theme-logo">
-                <a href="{% url 'homepage' %}">
+                <a href="{% url 'meeting:room_list' %}">
                     <img src="{% static 'src/assets/img/logo.svg' %}" class="navbar-logo"
                          alt="logo">
                 </a>
             </li>
             <li class="nav-item theme-text">
-                <a href="{% url 'homepage' %}" class="nav-link"> Event Planner </a>
+                <a href="{% url 'meeting:room_list' %}" class="nav-link"> Event Planner </a>
             </li>
         </ul>
 
@@ -177,13 +189,13 @@
             <div class="navbar-nav theme-brand flex-row  text-center">
                 <div class="nav-logo">
                     <div class="nav-item theme-logo">
-                        <a href="{% url 'homepage' %}">
+                        <a href="{% url 'meeting:room_list' %}">
                             <img src="{% static 'src/assets/img/logo.svg' %}" class="navbar-logo"
                                  alt="logo">
                         </a>
                     </div>
                     <div class="nav-item theme-text">
-                        <a href="{% url 'homepage' %}" class="nav-link"> CORK </a>
+                        <a href="{% url 'meeting:room_list' %}" class="nav-link"> CORK </a>
                     </div>
                 </div>
                 <div class="nav-item sidebar-toggle">
@@ -200,7 +212,7 @@
             <div class="shadow-bottom"></div>
             <ul class="list-unstyled menu-categories" id="accordionExample">
                 <li id="homepage_navbar" class="menu">
-                    <a href="{% url 'homepage' %}" aria-expanded="false" class="dropdown-toggle">
+                    <a href="{% url 'meeting:room_list' %}" aria-expanded="false" class="dropdown-toggle">
                         <div class="">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -213,7 +225,7 @@
                     </a>
                 </li>
                 <li class="menu">
-                    <a href="{% url 'more' %}" aria-expanded="false" class="dropdown-toggle">
+                    <a href="#" aria-expanded="false" class="dropdown-toggle">
                         <div class="">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -335,6 +347,10 @@
 {% block scripts %}
 
 {% endblock %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
+
 </body>
 
 </html>
