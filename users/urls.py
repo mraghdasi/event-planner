@@ -6,8 +6,5 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     path('sign_up/', views.sign_up, name='sign_up'),
     path('login/', views.login, name='login'),
-
-
-    # APIs
-    path('edit_profile_api/', views.edit_profile_api, name='edit_profile_api')
+    path('otp/', views.otp, name='otp'),
 ]
