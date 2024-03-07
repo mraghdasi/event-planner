@@ -8,27 +8,27 @@ from users.models import User, Team
 
 
 def admin_home(request):
-    return render(request, 'admin-dash/home.html', {})
+    return render(request, 'admin_dash/home.html', {})
 
 
 def admin_users(request):
     users = User.objects.all()
-    return render(request, 'admin-dash/admin_users.html', {'users': users})
+    return render(request, 'admin_dash/admin_users.html', {'users': users})
 
 
 def admin_meetings(request):
     meetings = Meeting.objects.all()
-    return render(request, 'admin-dash/admin_meetings.html', {'meetings': meetings})
+    return render(request, 'admin_dash/admin_meetings.html', {'meetings': meetings})
 
 
 def admin_rooms(request):
     rooms = Room.objects.all()
-    return render(request, 'admin-dash/admin_rooms.html', {'rooms': rooms})
+    return render(request, 'admin_dash/admin_rooms.html', {'rooms': rooms})
 
 
 def admin_teams(request):
     teams = Team.objects.all()
-    return render(request, 'admin-dash/admin_teams.html', {'teams': teams})
+    return render(request, 'admin_dash/admin_teams.html', {'teams': teams})
 
 
 def edit_user(request, pk):
@@ -42,7 +42,7 @@ def edit_user(request, pk):
             messages.error(request, 'Error updating User. Please check the form.', 'danger')
     else:
         form = EditUserForm(instance=user)
-    return render(request, 'admin-dash/edit_user.html', {'form': form})
+    return render(request, 'admin_dash/edit_user.html', {'form': form})
 
 
 def edit_team(request, pk):
@@ -56,7 +56,7 @@ def edit_team(request, pk):
             messages.error(request, 'Error updating Team. Please check the form.', 'danger')
     else:
         form = TeamForm(instance=team)
-    return render(request, 'admin-dash/edit_team.html', {'form': form})
+    return render(request, 'admin_dash/edit_team.html', {'form': form})
 
 
 def add_team(request):
@@ -69,7 +69,7 @@ def add_team(request):
             messages.error(request, 'Error updating Team. Please check the form.', 'danger')
     else:
         form = TeamForm()
-    return render(request, 'admin-dash/add_team.html', {'form': form})
+    return render(request, 'admin_dash/add_team.html', {'form': form})
 
 
 def edit_room(request, pk):
@@ -83,7 +83,7 @@ def edit_room(request, pk):
             messages.error(request, 'Error updating Room. Please check the form.', 'danger')
     else:
         form = RoomForm(instance=room)
-    return render(request, 'admin-dash/edit_room.html', {'form': form})
+    return render(request, 'admin_dash/edit_room.html', {'form': form})
 
 
 def add_room(request):
@@ -96,7 +96,7 @@ def add_room(request):
             messages.error(request, 'Error updating Room. Please check the form.', 'danger')
     else:
         form = TeamForm()
-    return render(request, 'admin-dash/add_room.html', {'form': form})
+    return render(request, 'admin_dash/add_room.html', {'form': form})
 
 
 def edit_meeting(request, pk):
@@ -110,7 +110,7 @@ def edit_meeting(request, pk):
             messages.error(request, 'Error updating Meeting. Please check the form.', 'danger')
     else:
         form = MeetingForm(instance=meeting)
-    return render(request, 'admin-dash/edit_meeting.html', {'form': form})
+    return render(request, 'admin_dash/edit_meeting.html', {'form': form})
 
 
 def delete_meeting(request, pk):
