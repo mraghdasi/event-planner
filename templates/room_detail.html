@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block metadata %}
+    <title>Rooms Detail</title>
+
+
+{% endblock %}
+
+{% block breadcrumb %}
+
+    <nav class="breadcrumb-style-one" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Main</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Example</li>
+        </ol>
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <div class="text-center font-bold text-xl pb-3 border-b mb-5 flex items-center justify-between space-x-8">
+        <a href="{% url 'meeting:room_list' %}">
+            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5H1m0 0 4 4M1 5l4-4"/>
+            </svg>
+        </a>
+
+        <div class="flex items-center flex-1 justify-center space-x-8">
+            <p>{{ room.title }}</p>
+            <p>Meeting Reserve : {{ room.meeting_count }}</p>
+        </div>
+    </div>
+
+    <div inline-datepicker data-date="02/25/2022"></div>
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}

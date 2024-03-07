@@ -8,6 +8,7 @@ from EventPlanner import settings
 urlpatterns = [
                   path('admin/', admin.site.urls),
                   path('users/', include('users.urls')),
-                  path('meetings/', include('meetings.urls')),
+                  path('admin_dash/', include('admin_dash.urls')),
+                  path('', include('meetings.urls' , namespace='meeting')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) \
               + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
