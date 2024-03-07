@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block metadata %}
+    <title>Admin - Edit User</title>
+    <!--
+    Custom Head Elements (Like Styles)
+    ========================================
+    If You Want To Add Something To Head Tag Put it Below Of This Comment
+    ========================================
+    -->
+    {#    <link rel="stylesheet" href="{% static 'src/assets/css/dropify.min.css' %}">#}
+    <style>
+        .dropify-wrapper .dropify-message p {
+            font-size: 16px;
+        }
+
+    </style>
+    <link rel="stylesheet" type="text/css" href="https://jeremyfagis.github.io/dropify/dist/css/dropify.min.css">
+{% endblock %}
+
+{% block breadcrumb %}
+    <!--
+    Customize Below Code For Your Page
+    ========================================
+    First Li Represents Main App (Most of the time)
+    Second One Is Name Of Page
+    ========================================
+    -->
+
+    <nav class="breadcrumb-style-one" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Admin</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Edit User</li>
+        </ol>
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <!--
+    Content Section Finding in .html Files
+    ========================================
+    For Template Pages, Put Child Elements of *STAR* Div, Below Of This Comment
+    *STAR* = <div class="row layout-top-spacing">
+    Note: Search Above Div in Page You Are Working With
+    ========================================
+    -->
+
+    <div class="account-content">
+
+
+        <div class="tab-content" id="animateLineContent-4">
+            <div class="tab-pane fade active show" id="animated-underline-home" role="tabpanel"
+                 aria-labelledby="animated-underline-home-tab">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 layout-spacing">
+                        {% if messages %}
+                            <div class="alert alert-dismissible" role="alert">
+                                {% for message in messages %}
+                                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show"
+                                         role="alert">
+                                        {{ message }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                aria-label="Close"></button>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <form class="section general-info" method="post" action="" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="info">
+                                <h6 class="">User Information</h6>
+                                <div class="row">
+                                    <div class="col-lg-11 mx-auto">
+                                        <div class="row">
+                                            <div class="col-xl-3 col-lg-12 col-md-4">
+                                                <div class="profile-image  mt-4 pe-md-4">
+                                                    <div class="form-group" id="image_uploader">
+                                                        <label for="profile_img" class="d-none">Profile Image</label>
+                                                        {{ form.image }}
+                                                    </div>
+                                                    <!-- Render image field with form.image -->
+                                                    {{ form.image.errors }}
+                                                    <!-- Render image field errors if any -->
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-9 col-lg-12 col-md-8 mt-md-0 mt-4">
+                                                <div class="form">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                {{ form.username.label_tag }}
+                                                                {{ form.username }}
+                                                                <!-- Render username field with label and input -->
+                                                                {{ form.username.errors }}
+                                                                <!-- Render username field errors if any -->
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                {{ form.first_name.label_tag }}
+                                                                {{ form.first_name }}
+                                                                {{ form.first_name.errors }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                {{ form.last_name.label_tag }}
+                                                                {{ form.last_name }}
+                                                                {{ form.last_name.errors }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                {{ form.email.label_tag }}
+                                                                {{ form.email }}
+                                                                {{ form.email.errors }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                {{ form.phone_number.label_tag }}
+                                                                {{ form.phone_number }}
+                                                                {{ form.phone_number.errors }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                {{ form.team.label_tag }}
+                                                                {{ form.team }}
+                                                                {{ form.team.errors }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                {{ form.is_lead.label_tag }}
+                                                                {{ form.is_lead }}
+                                                                {{ form.is_lead.errors }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12 mt-1">
+                                                            <div class="form-group text-end">
+                                                                <button type="submit" class="btn btn-secondary">Save
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <!--
+    Custom Scripts
+    ========================================
+    You Can Add Some JavaScript Code After All Other Js Codes
+
+    Example1 - Code Below, Must Be Paste Below This Comment:
+    <script>console.log("Hello World!")</script>
+    ========================================
+    -->
+
+    <script type="text/javascript" src="https://jeremyfagis.github.io/dropify/dist/js/dropify.min.js"></script>
+
+    <script>
+        $('.dropify').dropify();
+        const dropify = $('.dropify-wrapper')
+        dropify.addClass('rounded-circle')
+        $(document).ready(function () {
+            $("#image_uploader").children().not(".dropify-wrapper.rounded-circle").remove();
+
+
+            // Find the target child element
+            var targetChild = $(".dropify-wrapper.rounded-circle");
+
+            // Find the text node preceding the target child element
+            var textNode = targetChild.parent().contents().filter(function () {
+                return this.nodeType === 3; //
+            });
+
+            // Remove the text node
+            textNode.remove();
+
+        })
+
+
+    </script>
+{% endblock %}
