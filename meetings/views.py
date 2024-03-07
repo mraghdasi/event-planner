@@ -1,6 +1,6 @@
+from django.db.models import Count
 from django.shortcuts import render
 from django.views import View
-from django.db.models import Count
 
 from meetings.models import Room
 
