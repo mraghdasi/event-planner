@@ -40,7 +40,19 @@
                                 <h2>Sign Up</h2>
                                 <p>Enter your email and password to register</p>
                             </div>
-                            <form method="post" enctype="multipart/form-data" action="/users/sign_up/">
+                            {% if messages %}
+                                <div class="alert alert-dismissible" role="alert">
+                                    {% for message in messages %}
+                                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show"
+                                             role="alert">
+                                            {{ message }}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <form method="post" enctype="multipart/form-data" action="">
                                 {% csrf_token %}
                                 <div class="col-md-12">
                                     <div class="mb-3">
@@ -72,8 +84,8 @@
                                 <div class="col-12">
                                     <div class="mb-3">
                                         <label class="form-label">Password</label>
-                                        {{ form.password1 }}
-                                        {% for error in form.password1.errors %}
+                                        {{ form.password }}
+                                        {% for error in form.password.errors %}
                                             <span class="text-danger">{{ error }}</span>
                                         {% endfor %}
                                     </div>
@@ -81,8 +93,8 @@
                                 <div class="col-12">
                                     <div class="mb-3">
                                         <label class="form-label">Confirm Password</label>
-                                        {{ form.password2 }}
-                                        {% for error in form.password2.errors %}
+                                        {{ form.password_confirm }}
+                                        {% for error in form.password_confirm.errors %}
                                             <span class="text-danger">{{ error }}</span>
                                         {% endfor %}
                                     </div>

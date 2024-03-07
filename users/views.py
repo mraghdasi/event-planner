@@ -1,4 +1,5 @@
 import random
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
@@ -8,12 +9,12 @@ from users.forms import ProfileForm, SignUpForm
 
 
 def generate_otp():
-    otp = random.randint(1000, 9999)
-    return otp
+    o = random.randint(1000, 9999)
+    return o
 
 
-def send_otp(otp):
-    print("Your OTP is:", otp)
+def send_otp(o):
+    print("Your OTP is:", o)
 
 
 def otp(request):
@@ -33,7 +34,7 @@ def otp(request):
             del request.session['form_data']
             if user is not None:
                 login(request, user)
-                return redirect('/users/profile/')
+                return redirect('homepage')
         else:
             return render(request, 'users/otp.html', {'error': 'Invalid OTP'})
     else:
@@ -49,10 +50,11 @@ def sign_up(request):
             request.session['otp'] = otp_generated
             request.session['username'] = form.cleaned_data.get('username')
             request.session['password'] = form.cleaned_data.get('password')
-            request.session['form_data'] = form.cleaned_data
+            request.session['form_data'] = {i: form.cleaned_data[i] for i in form.cleaned_data if i != 'image'}
             send_otp(otp_generated)
-
-            return redirect('/users/otp/')
+            return redirect('otp')
+        else:
+            messages.error(request, form.errors, 'danger')
     else:
         form = SignUpForm()
     return render(request, 'users/signup.html', {'form': form})
