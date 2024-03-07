@@ -1,47 +1,48 @@
 {% extends 'base.html' %}
 
 {% block metadata %}
-<title>Rooms</title>
-<!--
-Custom Head Elements (Like Styles)
-========================================
-If You Want To Add Something To Head Tag Put it Below Of This Comment
-========================================
--->
+    <title>Rooms</title>
+    <!--
+    Custom Head Elements (Like Styles)
+    ========================================
+    If You Want To Add Something To Head Tag Put it Below Of This Comment
+    ========================================
+    -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet"/>
 
 {% endblock %}
 
 {% block breadcrumb %}
-<!--
-Customize Below Code For Your Page
-========================================
-First Li Represents Main App (Most of The Times)
-Second One Is Name Of Page
-========================================
--->
+    <!--
+    Customize Below Code For Your Page
+    ========================================
+    First Li Represents Main App (Most of The Times)
+    Second One Is Name Of Page
+    ========================================
+    -->
 
-<nav class="breadcrumb-style-one" aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#">Main</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Example</li>
-    </ol>
-</nav>
+    <nav class="breadcrumb-style-one" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Main</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Example</li>
+        </ol>
+    </nav>
 {% endblock %}
 
 {% block content %}
-<h2 class="text-center font-bold text-xl pb-3 border-b mb-5">Rooms List</h2>
+    <h2 class="text-center font-bold text-xl pb-3 border-b mb-5">Rooms List</h2>
 
-<div class="grid grid-cols-3 gap-3">
-    {% for room in rooms %}
-    <a href="{% url 'meeting:room_detail' room.id %}" class="{{ room.is_active|yesno:'#,disabled' }}">
+    <div class="grid grid-cols-3 gap-3">
+        {% for room in rooms %}
+            <a href="{% url 'meeting:room_detail' room.id %}" class="{{ room.is_active|yesno:'#,disabled' }}">
 
-        <div class="p-5 border cursor-pointer rounded-xl hover:shadow-md text-center font-bold text-lg text-black {{ room.is_active|yesno:'bg-white,bg-gray-300 cursor-not-allowed' }}">
-            <p>{{ room.title }}</p>
-            <p> Meeting Reserved : {{room.meeting_count}}</p>
-        </div>
-    </a>
-    {% endfor %}
-</div>
+                <div class="p-5 border cursor-pointer rounded-xl hover:shadow-md text-center font-bold text-lg text-black {{ room.is_active|yesno:'bg-white,bg-gray-300 cursor-not-allowed' }}">
+                    <p>{{ room.title }}</p>
+                    <p> Meeting Reserved : {{ room.meeting_count }}</p>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
 
 {% endblock %}
 
