@@ -14,7 +14,5 @@ class TeamAdmin(admin.ModelAdmin):
     list_display = search_fields = ('title', 'get_team_count', 'is_active')
     list_filter = ('is_active',)
 
-    def get_team_count(self, obj):
-        return obj.users.count()
 
     get_team_count.short_description = 'Members Count'
