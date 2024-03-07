@@ -1,14 +1,17 @@
 {% extends 'base.html' %}
+{% load humanize %}
+{% load static %}
 
 {% block metadata %}
-    <title>Admin - Rooms</title>
+    <title>Admin - Meetings</title>
     <!--
     Custom Head Elements (Like Styles)
     ========================================
     If You Want To Add Something To Head Tag Put it Below Of This Comment
     ========================================
     -->
-
+    <link href="{% static 'src/assets/css/sweetalert2.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'src/assets/css/datatables.min.css' %}">
 {% endblock %}
 
 {% block breadcrumb %}
@@ -22,8 +25,8 @@
 
     <nav class="breadcrumb-style-one" aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Main</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Example</li>
+            <li class="breadcrumb-item"><a href="#">Admin</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Meetings</li>
         </ol>
     </nav>
 {% endblock %}
@@ -38,6 +41,36 @@
     ========================================
     -->
 
+    <div class="table-responsive">
+        <table id="example1" class="table table-bordered table-striped datatable_custom">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Team</th>
+                <th>Room</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for meeting in meetings %}
+                <tr>
+                    <td>{{ meeting.title }}</td>
+                    <td>{{ meeting.team.title }}</td>
+                    <td>{{ meeting.room.title }}</td>
+                    <td>{{ meeting.start_date|date:"Y-m-d H:i" }}</td>
+                    <td>{{ meeting.end_date|date:"Y-m-d H:i" }}</td>
+                    <td><a href="{% url 'edit_meeting' pk=meeting.id %}">Edit</a></td>
+                    <td><a class="delete_api" data-url="{% url 'delete_meeting' pk=meeting.id %}">Delete</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
 {% endblock %}
 
 {% block scripts %}
@@ -50,4 +83,71 @@
     <script>console.log("Hello World!")</script>
     ========================================
     -->
+    <script src="{% static 'src/assets/js/datatables.min.js' %}"></script>
+    <script>
+        $('.datatable_custom').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            'paging': true,
+            'lengthChange': true,
+            'searching': true,
+            'ordering': true,
+            'autoWidth': true,
+            "order": [],
+            "pageLength": 10,
+            lengthMenu: [
+                [10, 25, 50, -1],
+                [10, 25, 50, 'All']
+            ],
+        });
+    </script>
+    <script src="{% static 'src/assets/js/sweetalert2.all.min.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            $('.delete_api').click(function () {
+                const element = $(this)
+                Swal.fire({
+                    title: 'Do you want to delete the meeting?',
+                    showDenyButton: true,
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes',
+                    denyButtonText: 'No',
+                }).then((result) => {
+                    if (result.value) {
+                        $.ajax({
+                            url: element.attr('data-url'),
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function (data) {
+                                Swal.fire({
+                                    title: 'successful',
+                                    text: 'Meeting Deleted Successfully',
+                                    type: 'success',
+                                    confirmButtonClass: 'btn btn-success',
+                                    buttonsStyling: !1
+                                }).then(function () {
+                                    window.location.reload()
+                                })
+                            },
+                            error: function (xhr, status, error) {
+                                Swal.fire({
+                                    title: 'Unsuccessful',
+                                    text: JSON.parse(xhr.responseText).msg,
+                                    type: 'error',
+                                    confirmButtonClass: 'btn btn-success',
+                                    buttonsStyling: !1
+                                })
+                            }
+                        });
+
+                    } else if (result.dismiss) {
+                        Swal.fire('Meeting not deleted', '', 'info')
+                    }
+                })
+            })
+        })
+    </script>
 {% endblock %}
