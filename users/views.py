@@ -7,6 +7,10 @@ def sign_up(request):
     return render(request, 'users/signup.html', {})
 
 
+def login(request):
+    return render(request, 'users/login.html', {})
+
+
 @login_required
 def profile(request):
     return render(request, 'users/profile.html', {})
