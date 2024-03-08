@@ -1,7 +1,7 @@
 import re
 
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.forms import ModelForm
@@ -16,6 +16,15 @@ class SignUpForm(UserCreationForm):
         super(SignUpForm, self).__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             field.widget.attrs.update({'class': 'form-control'})
+        self.fields['username'].widget.attrs['placeholder'] = '5 Characters long can\'t be all nums Eng only'
+        self.fields['first_name'].widget.attrs['placeholder'] = 'Eng only'
+        self.fields['last_name'].widget.attrs['placeholder'] = 'Eng only'
+        self.fields['email'].widget.attrs['placeholder'] = 'example@example.com'
+        self.fields['phone_number'].widget.attrs['placeholder'] = '09121231234'
+        self.fields['password1'].widget.attrs[
+            'placeholder'] = '8 Characters long at least 1 special character'
+        self.fields['password2'].widget.attrs[
+            'placeholder'] = 'and 1 uppercase letter and 2 digits'
 
     class Meta:
         model = User
@@ -64,11 +73,11 @@ class SignUpForm(UserCreationForm):
 
     def clean_password(self):
         password = self.cleaned_data['password1']
-        if not re.match(r"^.{5,255}$", password):
-            raise forms.ValidationError("Password should be at least 5 characters long.")
-        if not re.search(r"(.*[!@#$%^&*()_+\-=\[\]{};':\"\\,.<>?].*){1,}", password):
+        if not re.match(r"^.{8,255}$", password):
+            raise forms.ValidationError("Password should be at least 8 characters long.")
+        if not re.search(r"(.*[!@#$%^&*()_+\-=\[\]{};':\"\\,.<>?].*)+", password):
             raise forms.ValidationError("Password should have at least one special character.")
-        if not re.search(r"(.*[A-Z].*){1,}", password):
+        if not re.search(r"(.*[A-Z].*)+", password):
             raise forms.ValidationError("Password should have at least one uppercase letter")
         if not re.search(r"(.*\d.*){2,}", password):
             raise forms.ValidationError("Password should have at least two digits")
@@ -87,6 +96,37 @@ class SignUpForm(UserCreationForm):
             if not image.name.lower().endswith(('.jpg', '.jpeg', '.png')):
                 raise forms.ValidationError("Image must be in JPG or JPEG or PNG format.")
         return image
+
+
+class LoginForm(AuthenticationForm):
+    username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Username'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}))
+
+
+class CustomPasswordResetForm(forms.Form):
+    new_password1 = forms.CharField(label='New Password', widget=forms.PasswordInput(
+        attrs={'class': 'form-control'}))
+    new_password2 = forms.CharField(label='Confirm New Password', widget=forms.PasswordInput(
+        attrs={'class': 'form-control'}))
+
+    def clean_password(self):
+        password = self.cleaned_data['new_password1']
+        if not re.match(r"^.{8,255}$", password):
+            raise forms.ValidationError("Password should be at least 8 characters long.")
+        if not re.search(r"(.*[!@#$%^&*()_+\-=\[\]{};':\"\\,.<>?].*)+", password):
+            raise forms.ValidationError("Password should have at least one special character.")
+        if not re.search(r"(.*[A-Z].*)+", password):
+            raise forms.ValidationError("Password should have at least one uppercase letter")
+        if not re.search(r"(.*\d.*){2,}", password):
+            raise forms.ValidationError("Password should have at least two digits")
+        return password
+
+    def clean_password_confirm(self):
+        password_confirm = self.cleaned_data['new_password2']
+        password = self.cleaned_data['new_password1']
+        if not compare_digest(password, password_confirm):
+            raise forms.ValidationError("Passwords do not match")
+        return password_confirm
 
 
 class ProfileForm(ModelForm):

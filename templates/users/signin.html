@@ -55,39 +55,55 @@
                                 <p>Enter your username and password to login</p>
 
                             </div>
-                            <div class="col-md-12">
-                                <div class="mb-3">
-                                    <label class="form-label">Username</label>
-                                    <input type="text" class="form-control">
+                            {% if messages %}
+                                <div class="alert alert-dismissible" role="alert">
+                                    {% for message in messages %}
+                                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show"
+                                             role="alert">
+                                            {{ message }}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                    {% endfor %}
                                 </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="mb-4">
-                                    <label class="form-label">Password</label>
-                                    <input type="text" class="form-control">
+                            {% endif %}
+                            <form method="post" enctype="multipart/form-data" action="/users/sign_in/">
+                                {% csrf_token %}
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label class="form-label">Username</label>
+                                        {{ form.username }}
+                                        {% for error in form.username.errors %}
+                                            <span class="text-danger">{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
                                 </div>
-                            </div>
-
-
-                            <div class="col-12">
-                                <div class="mb-4">
-                                    <button class="btn btn-secondary w-100">LOGIN</button>
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        <label class="form-label">Password</label>
+                                        {{ form.password }}
+                                        {% for error in form.password.errors %}
+                                            <span class="text-danger">{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
                                 </div>
-                            </div>
 
-
-                            <div class="col-sm-4 col-12">
-                                <div class="mb-4">
-
+                                <div class="col-12">
+                                    <div class="mb-4">
+                                        <button class="btn btn-secondary w-100">LOGIN</button>
+                                    </div>
                                 </div>
-                            </div>
+
+
+                            </form>
 
                             <div class="col-12">
                                 <div class="text-center">
                                     <p class="mb-0">Don't have an account ? <a href="/users/sign_up"
                                                                                class="text-warning">Sign Up</a></p>
                                     <p class="mb-0">Forgot you password? <a href="/users/reset_password"
-                                                                            class="text-warning">Reset Password</a></p>
+                                                                            class="text-warning">Reset Password</a>
+                                    </p>
                                 </div>
                             </div>
 
