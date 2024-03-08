@@ -69,15 +69,16 @@
                         <div class="row">
                             <div class="col-md-12 mb-3">
 
-                                <h2>OTP</h2>
-                                <p>Enter the code for verification.</p>
+                                <h2>Phone Number Authentication</h2>
+                                <p>Enter the code for authentication.</p>
 
                             </div>
-                            <form method="post" action="/users/otp/">
+                            <form method="post" action="/users/phone_auth/">
                                 {% csrf_token %}
                                 <div class="col-md-12">
                                     <div class="mb-3">
                                         <input type="text" class="form-control" name="otp">
+                                        <span class="text-danger">{{ error }}</span>
                                     </div>
                                 </div>
 
@@ -89,7 +90,7 @@
                             </form>
                             <div class="col-12">
                                 <div class="text-center">
-                                    <p class="mb-0">Didn't receive the code ? <a href="/users/otp/"
+                                    <p class="mb-0">Didn't receive the code ? <a href="/users/phone_auth/"
                                                                                  class="text-warning">Resend</a></p>
                                 </div>
                             </div>

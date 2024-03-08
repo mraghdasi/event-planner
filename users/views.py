@@ -17,42 +17,37 @@ def send_otp(o):
     print("Your OTP is:", o)
 
 
-def otp(request):
+def otp_generator(request):
+    otp_generated = generate_otp()
+    send_otp(otp_generated)
+    request.session["otp"] = otp_generated
+
+
+@login_required(login_url='/users/login/')
+def phone_auth(request):
     if request.method == 'POST':
         otp_entered = request.POST.get('otp')
-        otp_generated = request.session.get('otp')
-
+        otp_generated = str(request.session.get('otp'))
         if otp_entered == otp_generated:
-            form_data = request.session.get('form_data')
-            form = SignUpForm(form_data)
-            form.save()
-            user = authenticate(request, username=request.session.get('username'),
-                                password=request.session.get('password'))
-            del request.session['otp']
-            del request.session['username']
-            del request.session['password']
-            del request.session['form_data']
-            if user is not None:
-                login(request, user)
-                return redirect('homepage')
+            user = request.user
+            user.is_fully_authenticated = True
+            user.save()
+            return redirect('profile')
         else:
-            return render(request, 'users/otp.html', {'error': 'Invalid OTP'})
+            return render(request, 'users/phone_auth.html', {'error': 'Invalid OTP'})
     else:
-        return render(request, 'users/otp.html')
+        otp_generator(request)
+        return render(request, 'users/phone_auth.html')
 
 
 def sign_up(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST, request.FILES)
         if form.is_valid():
-            otp_generated = generate_otp()
-
-            request.session['otp'] = otp_generated
-            request.session['username'] = form.cleaned_data.get('username')
-            request.session['password'] = form.cleaned_data.get('password')
-            request.session['form_data'] = {i: form.cleaned_data[i] for i in form.cleaned_data if i != 'image'}
-            send_otp(otp_generated)
-            return redirect('otp')
+            user = form.save()
+            user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password1'])
+            login(request, user)
+            return redirect('phone_auth')
         else:
             messages.error(request, form.errors, 'danger')
     else:
@@ -60,11 +55,11 @@ def sign_up(request):
     return render(request, 'users/signup.html', {'form': form})
 
 
-def login(request):
-    if request.method == 'POST':
-        ...
-    else:
-        return render(request, 'users/login.html', {})
+# def login(request):
+#     if request.method == 'POST':
+#         ...
+#     else:
+#         return render(request, 'users/login.html', {})
 
 
 @login_required

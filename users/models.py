@@ -9,6 +9,7 @@ class User(AbstractUser):
     phone_number = models.CharField(max_length=11)
     team = models.ForeignKey('users.Team', related_name='members', on_delete=models.SET_NULL, null=True, blank=True)
     is_lead = models.BooleanField(default=False)
+    is_fully_authenticated = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.username} | {self.get_full_name()}'
