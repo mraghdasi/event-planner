@@ -1,9 +1,45 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block metadata %}
     <title>Rooms Detail</title>
 
+    <link href="{% static 'calender/assets/css/fullcalendar.css' %}" rel="stylesheet"/>
+    <link href="{% static 'calender/assets/css/fullcalendar.print.css' %}" rel="stylesheet" media="print"/>
+    {#    <script src="{% static 'calender/assets/js/jquery-1.10.2.js' %}" type="text/javascript"></script>#}
+    <script src="{% static 'calender/assets/js/jquery-ui.custom.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'calender/assets/js/fullcalendar.js' %}" type="text/javascript"></script>
+    <style>
 
+
+        #external-events h4 {
+            font-size: 16px;
+            margin-top: 0;
+            padding-top: 1em;
+        }
+
+
+        #external-events p {
+            margin: 1.5em 0;
+            font-size: 11px;
+            color: #666;
+        }
+
+        #external-events p input {
+            margin: 0;
+            vertical-align: middle;
+        }
+
+        #calendar {
+            /* 		float: right; */
+            margin: 0 auto;
+            width: 900px;
+            background-color: #FFFFFF;
+            border-radius: 6px;
+            box-shadow: 0 1px 2px #C3C3C3;
+        }
+
+    </style>
 {% endblock %}
 
 {% block breadcrumb %}
@@ -23,17 +59,203 @@
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5H1m0 0 4 4M1 5l4-4"/>
             </svg>
         </a>
+    </div>
 
-        <div class="flex items-center flex-1 justify-center space-x-8">
-            <p>{{ room.title }}</p>
-            <p>Meeting Reserve : {{ room.meeting_count }}</p>
+    <div class="flex space-x-6 items-center">
+        <img class="rounded-t-lg max-w-xl w-full" src="{% static 'image/meeting.webp' %}" alt="product image"/>
+
+        <div class="flex items-start flex-col justify-start space-y-8 flex-1">
+            <div class="space-x-6 text-black flex w-full">
+                <span class="text-gray-600 font-bold w-full" style="max-width: 120px">Title :</span>
+                <span class="font-bold w-full">{{ room.title }}</span>
+            </div>
+
+            <div class="space-x-6 text-black flex w-full">
+                <span class="text-gray-600 font-bold w-full" style="max-width: 120px">Capacity :</span>
+                <span class="font-bold w-full">{{ room.capacity }}</span>
+            </div>
+
+            <div class="space-x-6 text-black flex w-full">
+                <span class="text-gray-600 font-bold w-full" style="max-width: 120px">Total Reserve :</span>
+                <span class="font-bold w-full">{{ room.meeting_count }}</span>
+            </div>
         </div>
     </div>
 
-    <div inline-datepicker data-date="02/25/2022"></div>
+    <hr class="my-10">
+
+    <div id='calendar'></div>
+
+    <div class="modal fade show" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="bg-white shadow-md rounded modal-content">
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title text-white" id="exampleModalLongTitle">Add New Event</h5>
+                    <button id="modalClose1" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="grid grid-cols-2 gap-4 p-3">
+                        <div>
+                            <label for="{{ form.title.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">Title:</label>
+                            {{ form.title }}
+                        </div>
+
+                        <div>
+                            <label for="{{ form.team.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">Team:</label>
+                            {{ form.team }}
+                        </div>
+
+                        <div>
+                            <label for="{{ form.start_date.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">Start Date:</label>
+                            {{ form.start_date }}
+                        </div>
+
+                        <div>
+                            <label for="{{ form.end_date.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">End Date:</label>
+                            {{ form.end_date }}
+                        </div>
+
+                        <input type="hidden" name="room" value="{{ room.id }}">
+                    </div>
+                    <div class="modal-footer">
+                        <button id="closeBtn1" type="button" class="btn btn-danger bg-red-700">Close</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 
 {% endblock %}
 
 {% block scripts %}
+    <script>
 
+        const closeBtn1 = document.getElementById('modalClose1');
+        const closeBtn2 = document.getElementById('closeBtn1');
+
+        if (`{{ has_error|safe }}` === 'True') {
+            const eventModal = document.getElementById('eventModal')
+            eventModal.style.display = 'block';
+        }
+
+        if (closeBtn1) {
+            closeBtn1.addEventListener('click', () => {
+                const eventModal = document.getElementById('eventModal')
+                eventModal.style.display = 'none';
+            });
+        }
+        if (closeBtn2) {
+            closeBtn2.addEventListener('click', () => {
+                const eventModal = document.getElementById('eventModal')
+                eventModal.style.display = 'none';
+            });
+        }
+
+        function converterDataParaDjangoFormat(data) {
+            const dataJS = new Date(data);
+            const ano = dataJS.getFullYear();
+            const mes = (dataJS.getMonth() + 1).toString().padStart(2, '0');
+            const dia = dataJS.getDate().toString().padStart(2, '0');
+            const hora = dataJS.getHours().toString().padStart(2, '0');
+            const minuto = dataJS.getMinutes().toString().padStart(2, '0');
+            const segundo = dataJS.getSeconds().toString().padStart(2, '0');
+            const formatoDjango = `${ano}-${mes}-${dia} ${hora}:${minuto}:${segundo}`;
+            return formatoDjango;
+        }
+
+        $(document).ready(function () {
+            var date = new Date();
+            var d = date.getDate();
+            var m = date.getMonth();
+            var y = date.getFullYear();
+
+            /*  className colors
+
+            className: default(transparent), important(red), chill(pink), success(green), info(blue)
+
+            */
+
+
+            /* initialize the external events
+            -----------------------------------------------------------------*/
+
+            $("#external-events div.external-event").each(function () {
+
+                // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
+                // it doesn't need to have a start or end
+                var eventObject = {
+                    title: $.trim($(this).text()) // use the element's text as the event title
+                };
+
+                // store the Event Object in the DOM element so we can get to it later
+                $(this).data('eventObject', eventObject);
+
+
+            });
+
+
+            /* initialize the calendar
+            -----------------------------------------------------------------*/
+
+            const calendar = $('#calendar').fullCalendar({
+                header: {
+                    left: 'title',
+                    right: 'prev,next today'
+                },
+                editable: true,
+                firstDay: 1, //  1(Monday) this can be changed to 0(Sunday) for the USA system
+                selectable: true,
+                defaultView: 'month',
+
+                axisFormat: 'h:mm',
+                columnFormat: {
+                    month: 'ddd',    // Mon
+                    week: 'ddd d', // Mon 7
+                    day: 'dddd M/d',  // Monday 9/7
+                    agendaDay: 'dddd d'
+                },
+                titleFormat: {
+                    month: 'MMMM yyyy', // September 2009
+                    week: "MMMM yyyy", // September 2009
+                    day: 'MMMM yyyy'                  // Tuesday, Sep 8, 2009
+                },
+                allDaySlot: false,
+                selectHelper: true,
+                select: function (start, end, allDay) {
+                    console.log(start, end, allDay);
+                    const isLead = `{{ user.is_lead }}` === 'True'
+
+                    if (isLead) {
+                        const modal = document.getElementById('eventModal')
+                        modal.style.display = 'block'
+                        document.getElementById('id_start_date').value = converterDataParaDjangoFormat(start);
+                        document.getElementById('id_end_date').value = converterDataParaDjangoFormat(end);
+                    }
+                },
+
+
+                events: {{ meetings|safe }},
+            });
+
+
+        });
+
+    </script>
+
+{% endblock %}
+
+
+{% block toast-class %}
+    {{ block.super }}
+    {% if form.non_field_errors %}
+        !flex
+    {% endif %}
+{% endblock %}
+{% block toast-messege %}
+    {{ form.non_field_errors }}
 {% endblock %}

@@ -9,7 +9,9 @@
     <link rel="icon" type="image/x-icon" href="{% static '/src/assets/favicon.ico' %}"/>
     <link href="{% static '/layouts/vertical-light-menu/css/light/loader.css' %}" rel="stylesheet" type="text/css"/>
     <link href="{% static '/layouts/vertical-light-menu/css/dark/loader.css' %}" rel="stylesheet" type="text/css"/>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+            integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{% static '/tailwind/tailwind.config.js' %}"></script>
 
 
@@ -64,7 +66,7 @@
     {% block metadata %}
     {% endblock %}
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet"/>
 
 </head>
 <body class="layout-boxed">
@@ -127,7 +129,7 @@
                     <div class="avatar-container">
                         <div class="avatar avatar-sm avatar-indicators avatar-online">
                             <img alt="avatar" src="
-                                    {% if request.user %}{{ request.user.image.url }}{% else %}{% static '/src/assets/img/profile-30.png' %}{% endif %}"
+                                    {% if request.user.image %}{{ request.user.image.url }}{% else %}{% static '/src/assets/img/profile-30.png' %}{% endif %}"
                                  class="rounded-circle">
                         </div>
                     </div>
@@ -314,6 +316,11 @@
     </div>
     <!--  END CONTENT AREA  -->
 </div>
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
 <!-- END MAIN CONTAINER -->
 
 <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
@@ -323,9 +330,7 @@
 <script src="{% static '/src/plugins/src/waves/waves.min.js' %}"></script>
 <script src="{% static '/layouts/vertical-light-menu/app.js' %}"></script>
 <!-- END GLOBAL MANDATORY SCRIPTS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <script>
     $(function () {
         $('a').each(function () {
@@ -347,9 +352,6 @@
 {% block scripts %}
 
 {% endblock %}
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
 
 </body>
 
