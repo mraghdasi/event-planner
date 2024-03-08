@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block metadata %}
+    <title>Admin - Teams</title>
+    <!--
+    Custom Head Elements (Like Styles)
+    ========================================
+    If You Want To Add Something To Head Tag Put it Below Of This Comment
+    ========================================
+    -->
+    <link rel="stylesheet" href="{% static 'src/assets/css/datatables.min.css' %}">
+{% endblock %}
+
+{% block breadcrumb %}
+    <!--
+    Customize Below Code For Your Page
+    ========================================
+    First Li Represents Main App (Most of The Times)
+    Second One Is Name Of Page
+    ========================================
+    -->
+
+    <nav class="breadcrumb-style-one" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Admin</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Teams</li>
+        </ol>
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <!--
+    Content Section Finding in .html Files
+    ========================================
+    For Template Pages, Put Child Elements of *STAR* Div, Below Of This Comment
+    *STAR* = <div class="row layout-top-spacing">
+    Note: Search Above Div in Page You Are Working With
+    ========================================
+    -->
+    <div class="col-12">
+        <a class="float-end" href="{% url 'add_team' %}">
+            <button class="btn btn-outline-success btn-icon mb-2 me-4">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                     class="feather feather-plus-square">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="12" y1="8" x2="12" y2="16"></line>
+                    <line x1="8" y1="12" x2="16" y2="12"></line>
+                </svg>
+            </button>
+        </a>
+    </div>
+    <div class="table-responsive">
+        <table id="example1" class="table table-bordered table-striped datatable_custom">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Is Active</th>
+                <th>Edit</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for team in teams %}
+                <tr>
+                    <td>{{ team.title }}</td>
+                    <td>{% if team.is_active %}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="feather feather-check-square">
+                            <polyline points="9 11 12 14 22 4"></polyline>
+                            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                        </svg>{% else %}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                             class="feather feather-x-square">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="9" y1="9" x2="15" y2="15"></line>
+                            <line x1="15" y1="9" x2="9" y2="15"></line>
+                        </svg>{% endif %}</td>
+                    <td><a href="{% url 'edit_team' pk=team.id %}">Edit</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    
+    
+{% endblock %}
+
+{% block scripts %}
+    <!--
+    Custom Scripts
+    ========================================
+    You Can Add Some JavaScript Code After All Other Js Codes
+
+    Example1 - Code Below, Must Be Paste Below This Comment:
+    <script>console.log("Hello World!")</script>
+    ========================================
+    -->
+    <script src="{% static 'src/assets/js/datatables.min.js' %}"></script>
+    <script>
+        $('.datatable_custom').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            'paging': true,
+            'lengthChange': true,
+            'searching': true,
+            'ordering': true,
+            'autoWidth': true,
+            "order": [],
+            "pageLength": 10,
+            lengthMenu: [
+                [10, 25, 50, -1],
+                [10, 25, 50, 'All']
+            ],
+        });
+    </script>
+{% endblock %}

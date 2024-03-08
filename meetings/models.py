@@ -10,7 +10,7 @@ class Room(models.Model):
     description = models.TextField(null=True, blank=True, max_length=2000)
 
     def __str__(self):
-        return f'{self.title}, {self.is_active}'
+        return f'{self.title} | {self.is_active}'
 
 
 class Meeting(models.Model):

@@ -19,6 +19,14 @@ class CustomJSONEncoder(DjangoJSONEncoder):
         return super().default(obj)
 
 
+def more(request):
+    return render(request, 'meeting/../templates/example.html', {})
+
+
+def homepage(request):
+    return render(request, 'meeting/../templates/example.html', {})
+
+
 class RoomList(View):
     def get(self, request):
         rooms = Room.objects.annotate(meeting_count=Count('meetings'))
