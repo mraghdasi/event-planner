@@ -74,24 +74,10 @@
 
                             </div>
                             <form method="post" action="/users/otp/">
-                                <div class="col-sm-2 col-3 ms-auto">
+                                {% csrf_token %}
+                                <div class="col-md-12">
                                     <div class="mb-3">
-                                        <input type="text" class="form-control opt-input">
-                                    </div>
-                                </div>
-                                <div class="col-sm-2 col-3">
-                                    <div class="mb-3">
-                                        <input type="email" class="form-control opt-input">
-                                    </div>
-                                </div>
-                                <div class="col-sm-2 col-3">
-                                    <div class="mb-3">
-                                        <input type="text" class="form-control opt-input">
-                                    </div>
-                                </div>
-                                <div class="col-sm-2 col-3 me-auto">
-                                    <div class="mb-3">
-                                        <input type="text" class="form-control opt-input">
+                                        <input type="text" class="form-control" name="otp">
                                     </div>
                                 </div>
 
@@ -103,7 +89,7 @@
                             </form>
                             <div class="col-12">
                                 <div class="text-center">
-                                    <p class="mb-0">Didn't receive the code ? <a href="javascript:void(0);"
+                                    <p class="mb-0">Didn't receive the code ? <a href="/users/otp/"
                                                                                  class="text-warning">Resend</a></p>
                                 </div>
                             </div>
@@ -123,7 +109,6 @@
 <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
 <script src="{% static 'src/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 <!-- END GLOBAL MANDATORY SCRIPTS -->
-<script src="{% static 'src/assets/js/authentication/2-Step-Verification.js' %}"></script>
 
 </body>
 
