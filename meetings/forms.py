@@ -7,23 +7,23 @@ from users.models import Team
 
 
 class MeetingForm(ModelForm):
-    team = forms.ModelChoiceField(queryset=Team.objects.filter(is_active=True), widget=forms.Select(attrs={'class': 'w-full'}))
+    team = forms.ModelChoiceField(queryset=Team.objects.filter(is_active=True), widget=forms.Select(attrs={'class': 'tw-w-full'}))
 
     class Meta:
         model = Meeting
         fields = ('title', 'team', 'room', 'start_date', 'end_date')
         widgets = {
-            'title': forms.TextInput(attrs={'class': 'w-full'}),
-            'team': forms.Select(attrs={'class': 'w-full'}),
+            'title': forms.TextInput(attrs={'class': 'tw-w-full'}),
+            'team': forms.Select(attrs={'class': 'tw-w-full'}),
             'room': forms.HiddenInput(),
             'start_date': forms.DateInput(
                 format=('%d/%m/%Y %H:%M'),
-                attrs={'class': 'w-full',
+                attrs={'class': 'tw-w-full',
                        'placeholder': 'Select a date',
                        'type': 'datetime-local'}),
             'end_date': forms.DateInput(
                 format=('%d/%m/%Y %H:%M'),
-                attrs={'class': 'w-full',
+                attrs={'class': 'tw-w-full',
                        'placeholder': 'Select a date',
                        'type': 'datetime-local'}),
         }

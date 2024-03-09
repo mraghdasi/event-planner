@@ -30,41 +30,41 @@
 {% endblock %}
 
 {% block content %}
-    <h2 class="text-center font-bold text-xl pb-3 border-b mb-5">Rooms List</h2>
+    <h2 class="tw-text-center tw-font-bold tw-text-xl tw-pb-3 tw-border-b tw-mb-5">Rooms List</h2>
 
-    <div class="grid grid-cols-3 gap-3">
+    <div class="tw-grid tw-grid-cols-3 tw-gap-3">
         {% for room in rooms %}
-            <div class="{{ room.is_active|yesno:'#,opacity-50' }} w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                <img class="p-5 rounded-t-lg" src="{% static 'image/meeting.webp' %}" alt="product image"/>
+            <div class="{{ room.is_active|yesno:'#,tw-opacity-50' }} tw-w-full tw-max-w-sm tw-bg-white tw-border tw-border-gray-200 tw-rounded-lg tw-shadow">
+                <img class="tw-p-5 tw-rounded-t-lg tw-w-full" src="{% static 'image/meeting.webp' %}" alt="product image"/>
 
-                <div class="px-4 pb-5">
+                <div class="tw-px-4 tw-pb-5">
 
-                    <h5 class="text-xl tracking-tight text-gray-900">{{ room.title }}</h5>
-                    <div class="flex items-center mt-2.5 mb-5">
-                        <div class="flex items-center space-x-1 rtl:space-x-reverse">
-                            <svg class="w-4 h-4 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                    <h5 class="tw-text-xl tw-tracking-tight tw-text-gray-900">{{ room.title }}</h5>
+                    <div class="tw-flex tw-items-center tw-mt-2.5 mb-5">
+                        <div class="tw-flex tw-items-center tw-space-x-1 tw-rtl:space-x-reverse">
+                            <svg class="tw-w-4 tw-h-4 tw-text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
                                 <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
                             </svg>
-                            <svg class="w-4 h-4 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                            <svg class="tw-w-4 tw-h-4 tw-text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
                                 <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
                             </svg>
-                            <svg class="w-4 h-4 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                            <svg class="tw-w-4 tw-h-4 tw-text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
                                 <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
                             </svg>
-                            <svg class="w-4 h-4 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                            <svg class="tw-w-4 tw-h-4 tw-text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
                                 <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
                             </svg>
-                            <svg class="w-4 h-4 text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                            <svg class="tw-w-4 tw-h-4 tw-text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
                                 <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
                             </svg>
                         </div>
-                        <span class="bg-blue-100 text-blue-800 text-xs px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-3">5.0</span>
+                        <span class="tw-bg-blue-100 tw-text-blue-800 tw-text-xs tw-px-2.5 tw-py-0.5 tw-rounded tw-ms-3">5.0</span>
                     </div>
-                    <div class="flex items-center justify-between space-x-8">
-                        <span class="font-bold text-gray-900">Capacity :{{ room.capacity }}</span>
+                    <div class="tw-flex tw-items-center tw-justify-between tw-space-x-8">
+                        <span class="tw-font-bold tw-text-gray-900">Capacity :{{ room.capacity }}</span>
 
                         <a href="{% url 'meeting:room_detail' room.id %}"
-                           class="flex-1 text-white bg-blue-700 hover:bg-blue-800 rounded-lg text-sm px-3 py-2.5 text-center cursor-pointer {{ room.is_active|yesno:'#,disabled' }}">Detail</a>
+                           class="tw-flex-1 tw-text-white tw-bg-blue-700 tw-hover:text-white tw-hover:bg-blue-800 tw-rounded-lg tw-text-sm tw-px-3 tw-py-2.5 tw-text-center tw-cursor-pointer {{ room.is_active|yesno:'#,disabled' }}">Detail</a>
                     </div>
                 </div>
             </div>

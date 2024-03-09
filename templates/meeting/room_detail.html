@@ -53,76 +53,86 @@
 {% endblock %}
 
 {% block content %}
-    <div class="text-center font-bold text-xl pb-3 border-b mb-5 flex items-center justify-between space-x-8">
+    <div class="tw-text-center tw-font-bold tw-text-xl tw-pb-3 tw-border-b tw-mb-5 tw-flex tw-items-center tw-justify-between tw-space-x-8">
         <a href="{% url 'meeting:room_list' %}">
-            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+            <svg class="tw-w-6 tw-h-6 tw-text-gray-800 tw-dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5H1m0 0 4 4M1 5l4-4"/>
             </svg>
         </a>
     </div>
 
-    <div class="flex space-x-6 items-center">
-        <img class="rounded-t-lg max-w-xl w-full" src="{% static 'image/meeting.webp' %}" alt="product image"/>
+    <div class="tw-flex tw-space-x-6 tw-items-center">
+        <img class="tw-rounded-t-lg tw-max-w-xl tw-w-full" src="{% static 'image/meeting.webp' %}" alt="product image"/>
 
-        <div class="flex items-start flex-col justify-start space-y-8 flex-1">
-            <div class="space-x-6 text-black flex w-full">
-                <span class="text-gray-600 font-bold w-full" style="max-width: 120px">Title :</span>
-                <span class="font-bold w-full">{{ room.title }}</span>
+        <div class="tw-flex tw-items-start tw-flex-col tw-justify-start tw-space-y-8 tw-flex-1">
+            <div class="tw-space-x-6 tw-text-black tw-flex tw-w-full">
+                <span class="tw-text-gray-600 tw-font-bold tw-w-full" style="max-width: 120px">Title :</span>
+                <span class="tw-font-bold tw-w-full">{{ room.title }}</span>
             </div>
 
-            <div class="space-x-6 text-black flex w-full">
-                <span class="text-gray-600 font-bold w-full" style="max-width: 120px">Capacity :</span>
-                <span class="font-bold w-full">{{ room.capacity }}</span>
+            <div class="tw-space-x-6 tw-text-black tw-flex tw-w-full">
+                <span class="tw-text-gray-600 tw-font-bold tw-w-full" style="max-width: 120px">Capacity :</span>
+                <span class="tw-font-bold tw-w-full">{{ room.capacity }}</span>
             </div>
 
-            <div class="space-x-6 text-black flex w-full">
-                <span class="text-gray-600 font-bold w-full" style="max-width: 120px">Total Reserve :</span>
-                <span class="font-bold w-full">{{ room.meeting_count }}</span>
+            <div class="tw-space-x-6 tw-text-black tw-flex tw-w-full">
+                <span class="tw-text-gray-600 tw-font-bold tw-w-full" style="max-width: 120px">Total Reserve :</span>
+                <span class="tw-font-bold tw-w-full">{{ room.meeting_count }}</span>
             </div>
         </div>
     </div>
 
-    <hr class="my-10">
+    <hr class="tw-my-10">
 
     <div id='calendar'></div>
 
     <div class="modal fade show" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="bg-white shadow-md rounded modal-content">
+            <div class="tw-bg-white tw-shadow-md tw-rounded modal-content">
                 <div class="modal-header bg-primary">
-                    <h5 class="modal-title text-white" id="exampleModalLongTitle">Add New Event</h5>
-                    <button id="modalClose1" type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                    <h5 class="modal-title tw-text-white" id="exampleModalLongTitle">Add New Event</h5>
+                    <button id="modalClose1" type="button" class="tw-border-none tw-bg-transparent tw-cursor-pointer" data-dismiss="modal" aria-label="Close">
+                        <svg height="25px" width="25px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                             viewBox="0 0 26 26" xml:space="preserve">
+                            <g>
+                                <path style="fill:#fff;" d="M21.125,0H4.875C2.182,0,0,2.182,0,4.875v16.25C0,23.818,2.182,26,4.875,26h16.25
+                                    C23.818,26,26,23.818,26,21.125V4.875C26,2.182,23.818,0,21.125,0z M18.78,17.394l-1.388,1.387c-0.254,0.255-0.67,0.255-0.924,0
+                                    L13,15.313L9.533,18.78c-0.255,0.255-0.67,0.255-0.925-0.002L7.22,17.394c-0.253-0.256-0.253-0.669,0-0.926l3.468-3.467
+                                    L7.221,9.534c-0.254-0.256-0.254-0.672,0-0.925l1.388-1.388c0.255-0.257,0.671-0.257,0.925,0L13,10.689l3.468-3.468
+                                    c0.255-0.257,0.671-0.257,0.924,0l1.388,1.386c0.254,0.255,0.254,0.671,0.001,0.927l-3.468,3.467l3.468,3.467
+                                    C19.033,16.725,19.033,17.138,18.78,17.394z"/>
+                            </g>
+                            </svg>
                     </button>
                 </div>
                 <form method="post">
                     {% csrf_token %}
-                    <div class="grid grid-cols-2 gap-4 p-3">
+                    <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-p-3">
                         <div>
-                            <label for="{{ form.title.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">Title:</label>
+                            <label for="{{ form.title.id_for_label }}" class="tw-block tw-text-gray-700 tw-text-sm tw-font-bold tw-mb-2">Title:</label>
                             {{ form.title }}
                         </div>
 
                         <div>
-                            <label for="{{ form.team.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">Team:</label>
+                            <label for="{{ form.team.id_for_label }}" class="tw-block tw-text-gray-700 tw-text-sm tw-font-bold tw-mb-2">Team:</label>
                             {{ form.team }}
                         </div>
 
                         <div>
-                            <label for="{{ form.start_date.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">Start Date:</label>
+                            <label for="{{ form.start_date.id_for_label }}" class="tw-block tw-text-gray-700 tw-text-sm tw-font-bold tw-mb-2">Start Date:</label>
                             {{ form.start_date }}
                         </div>
 
                         <div>
-                            <label for="{{ form.end_date.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">End Date:</label>
+                            <label for="{{ form.end_date.id_for_label }}" class="tw-block tw-text-gray-700 tw-text-sm tw-font-bold tw-mb-2">End Date:</label>
                             {{ form.end_date }}
                         </div>
 
                         <input type="hidden" name="room" value="{{ room.id }}">
                     </div>
                     <div class="modal-footer">
-                        <button id="closeBtn1" type="button" class="btn btn-danger bg-red-700">Close</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button id="closeBtn1" type="button" class="btn btn-danger tw-bg-red-700">Close</button>
+                        <button type="submit" class="btn tw-bg-blue-800 text-white">Save</button>
                     </div>
                 </form>
             </div>
