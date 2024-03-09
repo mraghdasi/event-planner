@@ -1,9 +1,10 @@
 import random
 
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.utils.datastructures import MultiValueDictKeyError
 
 from users.forms import ProfileForm, SignUpForm, LoginForm, CustomPasswordResetForm
 
@@ -23,17 +24,20 @@ def otp_generator(request):
     request.session["otp"] = otp_generated
 
 
-@login_required(login_url='/users/login/')
 def phone_auth(request):
+    phone_number = request.session.get('phone_number', default=None)
+    if phone_number is None:
+        return redirect('')
     if request.method == 'POST':
         otp_entered = request.POST.get('otp')
         otp_generated = str(request.session.get('otp'))
         if otp_entered == otp_generated:
             del request.session['otp']
-            user = request.user
+            user = authenticate(request, phone_number=phone_number)
             user.is_fully_authenticated = True
             user.save()
-            return redirect('profile')
+            del request.session['phone_number']
+            return redirect('sign_in')
         else:
             return render(request, 'users/phone_auth.html', {'error': 'Invalid OTP'})
     else:
@@ -46,8 +50,7 @@ def sign_up(request):
         form = SignUpForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save()
-            user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password1'])
-            login(request, user)
+            request.session['phone_number'] = user.phone_number
             return redirect('phone_auth')
         else:
             messages.error(request, form.errors, 'danger')
@@ -62,32 +65,37 @@ def sign_in(request):
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
+            print(username, password)
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                # Redirect to a success page or profile page
-                return redirect('/users/profile/')
+                return redirect('profile')
             else:
-                # Authentication failed, handle accordingly
                 return render(request, 'users/signin.html',
                               {'form': form, 'error_message': 'Invalid username or password'})
+        else:
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            print(username, password)
+            messages.error(request, form.errors, 'danger')
     else:
-        form = LoginForm()
+        form = LoginForm(request)
     return render(request, 'users/signin.html', {'form': form})
 
 
 def rest_password_otp(request):
+    phone_number = request.session.get('phone_number', default=None)
+    if phone_number is None:
+        return redirect('')
     if request.method == 'POST':
         otp_entered = request.POST.get('otp')
         otp_generated = str(request.session.get('otp'))
         if otp_entered == otp_generated:
             del request.session['otp']
-            user = authenticate(request, phone_number=request.session.get('phone_number'))
-            login(request, user)
-            del request.session['phone_number']
+            request.session['code_confirmed'] = True
             return redirect('reset_password')
         else:
-            return render(request, 'users/phone_auth.html', {'error': 'Invalid OTP'})
+            return render(request, 'users/reset_password_otp.html', {'error': 'Invalid OTP'})
     else:
         otp_generator(request)
         return render(request, 'users/reset_password_otp.html')
@@ -95,23 +103,43 @@ def rest_password_otp(request):
 
 def reset_password(request):
     form = CustomPasswordResetForm()
-    if request.method == 'POST' and request.POST['phone_number'] is not None:
+    try:
         phone_number = request.POST['phone_number']
+    except MultiValueDictKeyError:
+        phone_number = None
+    code_confirmed = request.session.get('code_confirmed', default=False)
+    try:
+        del request.session['code_confirmed']
+    except KeyError:
+        pass
+    if request.method == 'POST' and phone_number is not None:
         user = authenticate(request, phone_number=phone_number)
         if user is not None:
+            request.session['phone_number'] = phone_number
             if user.is_fully_authenticated:
-                request.session['phone_number'] = phone_number
                 return redirect('rest_password_otp')
             else:
                 return redirect('phone_auth')
         else:
             return render(request, 'users/reset_password.html', {'error': 'Your Phone Number Is Not In The Database'})
     elif request.method == 'POST':
-        ...
-    return render(request, 'users/reset_password.html', {'form': form})
+        form = CustomPasswordResetForm(request.POST)
+        if form.is_valid():
+            user = authenticate(request, phone_number=request.session.get('phone_number'))
+            user.set_password(form.cleaned_data['new_password1'])
+            user.save()
+            del request.session['phone_number']
+            return redirect('sign_in')
+
+    return render(request, 'users/reset_password.html', {'form': form, 'code_confirmed': code_confirmed})
 
 
-@login_required
+def sign_out(request):
+    logout(request)
+    return redirect('/')
+
+
+@login_required(login_url='sign_in')
 def profile(request):
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES, instance=request.user)

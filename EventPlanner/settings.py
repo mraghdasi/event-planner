@@ -92,3 +92,4 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 X_FRAME_OPTIONS = "SAMEORIGIN"
 SILENCED_SYSTEM_CHECKS = ["security.W019"]
+AUTHENTICATION_BACKENDS = ['users.backends.PhoneBackend', 'django.contrib.auth.backends.ModelBackend', ]
