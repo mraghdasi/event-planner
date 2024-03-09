@@ -56,7 +56,7 @@ def sign_up(request):
             messages.error(request, form.errors, 'danger')
     else:
         form = SignUpForm()
-    return render(request, 'users/signup.html', {'form': form})
+    return render(request, 'users/sign_up.html', {'form': form})
 
 
 def sign_in(request):
@@ -71,7 +71,7 @@ def sign_in(request):
                 login(request, user)
                 return redirect('profile')
             else:
-                return render(request, 'users/signin.html',
+                return render(request, 'users/sign_in.html',
                               {'form': form, 'error_message': 'Invalid username or password'})
         else:
             username = form.cleaned_data['username']
@@ -80,7 +80,45 @@ def sign_in(request):
             messages.error(request, form.errors, 'danger')
     else:
         form = LoginForm(request)
-    return render(request, 'users/signin.html', {'form': form})
+    return render(request, 'users/sign_in.html', {'form': form})
+
+
+def sign_in_otp_confirmation(request):
+    phone_number = request.session.get('phone_number', default=None)
+    if phone_number is None:
+        return redirect('')
+    if request.method == 'POST':
+        otp_entered = request.POST.get('otp')
+        otp_generated = str(request.session.get('otp'))
+        if otp_entered == otp_generated:
+            del request.session['otp']
+            user = authenticate(request, phone_number=phone_number)
+            login(request, user)
+            del request.session['phone_number']
+            return redirect('profile')
+        else:
+            return render(request, 'users/sign_in_otp_confirmation.html', {'error': 'Invalid OTP'})
+    else:
+        otp_generator(request)
+        return render(request, 'users/sign_in_otp_confirmation.html')
+
+
+def sign_in_otp(request):
+    try:
+        phone_number = request.POST['phone_number']
+    except MultiValueDictKeyError:
+        phone_number = None
+    if request.method == 'POST':
+        user = authenticate(request, phone_number=phone_number)
+        if user is not None:
+            request.session['phone_number'] = phone_number
+            if user.is_fully_authenticated:
+                return redirect('sign_in_otp_confirmation')
+            else:
+                return redirect('phone_auth')
+        else:
+            return render(request, 'users/sign_in_otp.html', {'error': 'Your Phone Number Is Not In The Database'})
+    return render(request, 'users/sign_in_otp.html')
 
 
 def rest_password_otp(request):
