@@ -139,6 +139,11 @@
                         <div class="avatar-container">
                             <div class="avatar avatar-sm avatar-indicators avatar-online">
                                 <img alt="avatar" src="
+
+
+
+
+
                                         {% if request.user.image %}{{ request.user.image.url }}{% else %}{% static '/src/assets/img/DefPFP.png' %}{% endif %}"
                                      class="rounded-circle">
                             </div>
@@ -349,18 +354,16 @@
 <!-- END GLOBAL MANDATORY SCRIPTS -->
 
 <script>
-    $(function () {
+    $(document).ready(function () {
         $('a').each(function () {
             if ($(this).prop('href') === window.location.href) {
                 $(this).addClass('active');
                 $(this).parents('li').addClass('active');
-            } else {
-                if (window.location.href === '/') {
-                    $('#homepage_navbar').addClass('active');
-
-                }
             }
         });
+        if ($('.sidebar-wrapper li.active').length === 0) {
+            $('#homepage_navbar').addClass('active');
+        }
     });
 </script>
 <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->

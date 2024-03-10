@@ -136,7 +136,7 @@ def reset_password(request):
 
 def sign_out(request):
     logout(request)
-    return redirect('/')
+    return redirect('sign_in')
 
 
 @login_required(login_url='sign_in')

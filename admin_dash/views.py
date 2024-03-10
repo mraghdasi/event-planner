@@ -5,32 +5,45 @@ from django.shortcuts import render, redirect
 from admin_dash.forms import EditUserForm, TeamForm, RoomForm, MeetingForm
 from meetings.models import Room, Meeting
 from users.models import User, Team
+from utils.views.decorators import login_required_custom, admin_required
 
 
+@login_required_custom
+@admin_required
 def admin_home(request):
     return render(request, 'admin_dash/home.html', {})
 
 
+@login_required_custom
+@admin_required
 def admin_users(request):
     users = User.objects.all()
     return render(request, 'admin_dash/admin_users.html', {'users': users})
 
 
+@login_required_custom
+@admin_required
 def admin_meetings(request):
     meetings = Meeting.objects.all()
     return render(request, 'admin_dash/admin_meetings.html', {'meetings': meetings})
 
 
+@login_required_custom
+@admin_required
 def admin_rooms(request):
     rooms = Room.objects.all()
     return render(request, 'admin_dash/admin_rooms.html', {'rooms': rooms})
 
 
+@login_required_custom
+@admin_required
 def admin_teams(request):
     teams = Team.objects.all()
     return render(request, 'admin_dash/admin_teams.html', {'teams': teams})
 
 
+@login_required_custom
+@admin_required
 def edit_user(request, pk):
     user = User.objects.get(id=pk)
     if request.method == 'POST':
@@ -45,6 +58,8 @@ def edit_user(request, pk):
     return render(request, 'admin_dash/edit_user.html', {'form': form})
 
 
+@login_required_custom
+@admin_required
 def edit_team(request, pk):
     team = Team.objects.get(id=pk)
     if request.method == 'POST':
@@ -59,6 +74,8 @@ def edit_team(request, pk):
     return render(request, 'admin_dash/edit_team.html', {'form': form})
 
 
+@login_required_custom
+@admin_required
 def add_team(request):
     if request.method == 'POST':
         form = TeamForm(request.POST)
@@ -72,6 +89,8 @@ def add_team(request):
     return render(request, 'admin_dash/add_team.html', {'form': form})
 
 
+@login_required_custom
+@admin_required
 def edit_room(request, pk):
     room = Room.objects.get(id=pk)
     if request.method == 'POST':
@@ -86,6 +105,8 @@ def edit_room(request, pk):
     return render(request, 'admin_dash/edit_room.html', {'form': form})
 
 
+@login_required_custom
+@admin_required
 def add_room(request):
     if request.method == 'POST':
         form = RoomForm(request.POST)
@@ -99,6 +120,8 @@ def add_room(request):
     return render(request, 'admin_dash/add_room.html', {'form': form})
 
 
+@login_required_custom
+@admin_required
 def edit_meeting(request, pk):
     meeting = Meeting.objects.get(id=pk)
     if request.method == 'POST':
@@ -113,6 +136,8 @@ def edit_meeting(request, pk):
     return render(request, 'admin_dash/edit_meeting.html', {'form': form})
 
 
+@login_required_custom
+@admin_required
 def delete_meeting(request, pk):
     try:
         Meeting.objects.get(id=pk).delete()
