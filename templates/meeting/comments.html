@@ -1,0 +1,131 @@
+{% load static %}
+
+{% block metadata %}
+    <style>
+        .widget-card-one {
+            background: #fff;
+            padding: 20px 0 !important;
+        }
+
+        .widget-content .media {
+            padding-left: 15px;
+            padding-right: 15px;
+            margin-bottom: 19px;
+            padding-bottom: 21px;
+            border-bottom: 1px dashed #e0e6ed;
+        }
+
+        .widget-content .media .w-img {
+            margin-right: 10px;
+            align-self: center;
+        }
+
+        .widget-content .media img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 3px solid #e0e6ed;
+        }
+
+        .widget-content .media-body {
+            align-self: center;
+        }
+
+        .media-body h6 {
+            font-weight: 700;
+            font-size: 15px;
+            letter-spacing: 0;
+            margin-bottom: 0;
+        }
+
+        .media-body p {
+            font-size: 13px;
+            letter-spacing: 0;
+            margin-bottom: 0;
+            font-weight: 600;
+            color: #888ea8;
+            padding: 0;
+        }
+
+
+        .widget-content p {
+            font-weight: 600;
+            font-size: 14px;
+            padding: 0 20px;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .widget-content .w-action {
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .w-action span {
+            vertical-align: sub;
+            font-weight: 700;
+            color: #0e1726;
+            letter-spacing: 1px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <!--
+    Content Section Finding in .html Files
+    ========================================
+    For Template Pages, Put Child Elements of *STAR* Div, Below Of This Comment
+    *STAR* = <div class="row layout-top-spacing">
+    Note: Search Above Div in Page You Are Working With
+    ========================================
+    -->
+    <h2 class="tw-text-center tw-font-bold tw-text-xl tw-pb-3 tw-border-b tw-mb-5">Comments</h2>
+
+    <div class="tw-grid tw-grid-cols-2 tw-gap-5 tw-mb-5">
+        {% for comment in comments %}
+            <div class="tw-w-full col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12">
+                <div class="widget widget-card-one">
+                    <div class="widget-content">
+
+                        <div class="media">
+                            <div class="w-img">
+                                <img src="
+                                    {% if comment.user.image %}{{ comment.user.image.url }}{% else %}{% static '/src/assets/img/DefPFP.png' %}{% endif %}"
+                                     alt="avatar">
+                            </div>
+                            <div class="media-body">
+                                <h6>{{ comment.user.get_full_name }}</h6>
+                                <p class="meta-date-time">{{ comment.date|date:"Y-m-d H:i" }}</p>
+                            </div>
+                        </div>
+
+                        <p>{{ comment.body }}</p>
+
+                        <div class="w-action">
+                            <div class="card-like tw-flex tw-items-center tw-space-x-4 tw-rtl:space-x-reverse">
+                                <div class="tw-flex tw-items-center tw-space-x-1 tw-rtl:space-x-reverse">
+                                    {% for _ in comment.get_fill_star_range %}
+                                        <svg class="tw-w-4 tw-h-4 tw-text-yellow-300" aria-hidden="true"
+                                             xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                        </svg>
+                                    {% endfor %}
+                                    {% for _ in comment.get_gray_star_range %}
+                                        <svg class="tw-w-4 tw-h-4 tw-text-gray-200" aria-hidden="true"
+                                             xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                        </svg>
+                                    {% endfor %}
+                                </div>
+                                <span style="margin-left: 3rem">{{ comment.rate }}</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+{% endblock %}

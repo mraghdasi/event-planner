@@ -1,4 +1,4 @@
-var App = function() {
+var App = function () {
     var MediaSize = {
         xl: 1200,
         lg: 992,
@@ -22,7 +22,7 @@ var App = function() {
     }
 
     var categoryScroll = {
-        scrollCat: function() {
+        scrollCat: function () {
             var sidebarWrapper = document.querySelectorAll('.sidebar-wrapper li.active')[0];
             var sidebarWrapperTop = sidebarWrapper.offsetTop - 50;
             setTimeout(() => {
@@ -33,7 +33,7 @@ var App = function() {
     }
 
     var toggleFunction = {
-        sidebar: function($recentSubmenu) {
+        sidebar: function ($recentSubmenu) {
 
             var sidebarCollapseEle = document.querySelectorAll('.sidebarCollapse');
 
@@ -71,9 +71,9 @@ var App = function() {
                 });
             });
         },
-        onToggleSidebarSubmenu: function() {
-            ['mouseenter', 'mouseleave'].forEach(function(e){
-                document.querySelector('.sidebar-wrapper').addEventListener(e, function() {
+        onToggleSidebarSubmenu: function () {
+            ['mouseenter', 'mouseleave'].forEach(function (e) {
+                document.querySelector('.sidebar-wrapper').addEventListener(e, function () {
                     if (document.querySelector('body').classList.contains('alt-menu')) {
                         if (document.querySelector('.meetings-container').classList.contains('sidebar-closed')) {
                             if (e === 'mouseenter') {
@@ -96,7 +96,7 @@ var App = function() {
                                     if (submenuExpandedToggleEle) {
                                         submenuExpandedToggleEle.setAttribute('aria-expanded', 'false');
                                     }
-                                    
+
                                 });
                             }
                         }
@@ -110,7 +110,7 @@ var App = function() {
                                     document.querySelector('li.menu.active').querySelector('.collapse.submenu.recent-submenu').classList.add('show');
                                     document.querySelector('.collapse.submenu.recent-submenu').parentNode.querySelector('.dropdown-toggle').setAttribute('aria-expanded', 'true');
                                 }
-                                
+
                             } else if (e === 'mouseleave') {
                                 getMenuList = document.querySelectorAll('li.menu');
                                 getMenuList.forEach(element => {
@@ -127,12 +127,12 @@ var App = function() {
                                     if (submenuExpandedToggleEle) {
                                         submenuExpandedToggleEle.setAttribute('aria-expanded', 'false');
                                     }
-                                    
+
                                 });
                             }
                         }
                     }
-                    
+
                 });
             });
 
@@ -140,7 +140,7 @@ var App = function() {
         offToggleSidebarSubmenu: function () {
             // $('.sidebar-wrapper').off('mouseenter mouseleave');
         },
-        overlay: function() {
+        overlay: function () {
             document.querySelector('#dismiss, .overlay').addEventListener('click', function () {
                 // hide sidebar
                 Dom.class.mainContainer.classList.add('sidebar-closed');
@@ -148,25 +148,25 @@ var App = function() {
                 // hide overlay
                 Dom.class.overlay.classList.remove('show');
                 Dom.main.classList.remove('sidebar-noneoverflow');
-            });            
+            });
         },
-        search: function() {
+        search: function () {
 
             if (Dom.class.search) {
-                
-                Dom.class.search.addEventListener('click', function(event) {
+
+                Dom.class.search.addEventListener('click', function (event) {
                     this.classList.add('show-search');
                     Dom.class.searchOverlay.classList.add('show');
                     document.querySelector('body').classList.add('search-active');
                 });
-                
-                Dom.class.searchOverlay.addEventListener('click', function(event) {
+
+                Dom.class.searchOverlay.addEventListener('click', function (event) {
                     this.classList.remove('show');
                     Dom.class.search.classList.remove('show-search');
                     document.querySelector('body').classList.remove('search-active');
                 });
-                
-                document.querySelector('.search-close').addEventListener('click', function(event) {
+
+                document.querySelector('.search-close').addEventListener('click', function (event) {
                     event.stopPropagation();
                     Dom.class.searchOverlay.classList.remove('show');
                     Dom.class.search.classList.remove('show-search');
@@ -180,220 +180,224 @@ var App = function() {
 
             var togglethemeEl = document.querySelector('.theme-toggle');
             var getBodyEl = document.body;
-            
-            togglethemeEl.addEventListener('click', function() {
-                
-                var getLocalStorage = localStorage.getItem("theme");
-                var parseObj = JSON.parse(getLocalStorage);
 
-                if (parseObj.settings.layout.darkMode) {
+            if (togglethemeEl) {
+                togglethemeEl.addEventListener('click', function () {
 
-                    var getObjectSettings = parseObj.settings.layout;
+                    var getLocalStorage = localStorage.getItem("theme");
+                    var parseObj = JSON.parse(getLocalStorage);
 
-                    var newParseObject = {...getObjectSettings, darkMode: false};
+                    if (parseObj.settings.layout.darkMode) {
 
-                    var newObject = { ...parseObj, settings: { layout: newParseObject }}
+                        var getObjectSettings = parseObj.settings.layout;
 
-                    localStorage.setItem("theme", JSON.stringify(newObject))
-                    
-                    var getUpdatedLocalObject = localStorage.getItem("theme");
-                    var getUpdatedParseObject = JSON.parse(getUpdatedLocalObject);
+                        var newParseObject = {...getObjectSettings, darkMode: false};
 
-                    if (!getUpdatedParseObject.settings.layout.darkMode) {
-                        document.body.classList.remove('dark')
-                        ifStarterKit = document.body.getAttribute('page') === 'starter-pack' ? true : false;
-                        if (ifStarterKit) {
-                            document.querySelector('.navbar-logo').setAttribute('src', 'https://designreset.com/cork/src/assets/img/logo2.svg')
-                        } else {
-                            document.querySelector('.navbar-logo').setAttribute('src', getUpdatedParseObject.settings.layout.logo.lightLogo)
+                        var newObject = {...parseObj, settings: {layout: newParseObject}}
+
+                        localStorage.setItem("theme", JSON.stringify(newObject))
+
+                        var getUpdatedLocalObject = localStorage.getItem("theme");
+                        var getUpdatedParseObject = JSON.parse(getUpdatedLocalObject);
+
+                        if (!getUpdatedParseObject.settings.layout.darkMode) {
+                            document.body.classList.remove('dark')
+                            ifStarterKit = document.body.getAttribute('page') === 'starter-pack' ? true : false;
+                            if (ifStarterKit) {
+                                document.querySelector('.navbar-logo').setAttribute('src', 'https://designreset.com/cork/src/assets/img/logo2.svg')
+                            } else {
+                                document.querySelector('.navbar-logo').setAttribute('src', getUpdatedParseObject.settings.layout.logo.lightLogo)
+                            }
                         }
-                    }
-                    
-                } else {
 
-                    var getObjectSettings = parseObj.settings.layout;
+                    } else {
 
-                    var newParseObject = {...getObjectSettings, darkMode: true};
+                        var getObjectSettings = parseObj.settings.layout;
 
-                    var newObject = { ...parseObj, settings: { layout: newParseObject }}
+                        var newParseObject = {...getObjectSettings, darkMode: true};
 
-                    localStorage.setItem("theme", JSON.stringify(newObject))
-                    
-                    var getUpdatedLocalObject = localStorage.getItem("theme");
-                    var getUpdatedParseObject = JSON.parse(getUpdatedLocalObject);
+                        var newObject = {...parseObj, settings: {layout: newParseObject}}
 
-                    if (getUpdatedParseObject.settings.layout.darkMode) {
-                        document.body.classList.add('dark')
+                        localStorage.setItem("theme", JSON.stringify(newObject))
 
-                        ifStarterKit = document.body.getAttribute('page') === 'starter-pack' ? true : false;
+                        var getUpdatedLocalObject = localStorage.getItem("theme");
+                        var getUpdatedParseObject = JSON.parse(getUpdatedLocalObject);
 
-                        if (ifStarterKit) {
-                            document.querySelector('.navbar-logo').setAttribute('src', 'https://designreset.com/cork/src/assets/img/logo.svg')
-                        } else {
-                            document.querySelector('.navbar-logo').setAttribute('src', getUpdatedParseObject.settings.layout.logo.darkLogo)
+                        if (getUpdatedParseObject.settings.layout.darkMode) {
+                            document.body.classList.add('dark')
+
+                            ifStarterKit = document.body.getAttribute('page') === 'starter-pack' ? true : false;
+
+                            if (ifStarterKit) {
+                                document.querySelector('.navbar-logo').setAttribute('src', 'https://designreset.com/cork/src/assets/img/logo.svg')
+                            } else {
+                                document.querySelector('.navbar-logo').setAttribute('src', getUpdatedParseObject.settings.layout.logo.darkLogo)
+                            }
+
                         }
-                        
+
                     }
-                    
-                }
-                
-                // localStorage.clear()
-            })
-            
+
+                    // localStorage.clear()
+                })
+            }
+
         }
     }
 
     var inBuiltfunctionality = {
-        mainCatActivateScroll: function() {
+        mainCatActivateScroll: function () {
 
             if (document.querySelector('.menu-categories')) {
-            
+
                 const ps = new PerfectScrollbar('.menu-categories', {
-                    wheelSpeed:.5,
-                    swipeEasing:!0,
-                    minScrollbarLength:40,
-                    maxScrollbarLength:300
+                    wheelSpeed: .5,
+                    swipeEasing: !0,
+                    minScrollbarLength: 40,
+                    maxScrollbarLength: 300
                 });
 
             }
         },
-        notificationScroll: function() {
+        notificationScroll: function () {
 
             if (document.querySelector('.notification-scroll')) {
                 const notificationS = new PerfectScrollbar('.notification-scroll', {
-                    wheelSpeed:.5,
-                    swipeEasing:!0,
-                    minScrollbarLength:40,
-                    maxScrollbarLength:300
+                    wheelSpeed: .5,
+                    swipeEasing: !0,
+                    minScrollbarLength: 40,
+                    maxScrollbarLength: 300
                 });
             }
-            
+
         },
-        preventScrollBody: function() {
+        preventScrollBody: function () {
             var nonScrollableElement = document.querySelectorAll('#sidebar, .user-profile-dropdown .dropdown-menu, .notification-dropdown .dropdown-menu,  .language-dropdown .dropdown-menu')
 
-            var preventScrolling = function(e) {
+            var preventScrolling = function (e) {
                 e = e || window.event;
                 if (e.preventDefault)
                     e.preventDefault();
-                e.returnValue = false;  
+                e.returnValue = false;
 
-                nonScrollableElement.scrollTop -= e. wheelDeltaY; 
+                nonScrollableElement.scrollTop -= e.wheelDeltaY;
             }
 
             nonScrollableElement.forEach(preventScroll => {
 
                 preventScroll.addEventListener('mousewheel', preventScrolling);
                 preventScroll.addEventListener('DOMMouseScroll', preventScrolling);
-                
+
             });
         },
-        searchKeyBind: function() {
+        searchKeyBind: function () {
 
             if (Dom.class.search) {
-                Mousetrap.bind('ctrl%2b/index.html', function() {
+                Mousetrap.bind('ctrl%2b/index.html', function () {
                     document.body.classList.add('search-active');
                     Dom.class.search.classList.add('show-search');
                     Dom.class.searchOverlay.classList.add('show');
                     Dom.class.searchForm.focus();
                     return false;
-                });                
+                });
             }
-            
+
         },
-        bsTooltip: function() {
+        bsTooltip: function () {
             var bsTooltip = document.querySelectorAll('.bs-tooltip')
             for (let index = 0; index < bsTooltip.length; index++) {
                 var tooltip = new bootstrap.Tooltip(bsTooltip[index])
             }
         },
-        bsPopover: function() {
+        bsPopover: function () {
             var bsPopover = document.querySelectorAll('.bs-popover')
             for (let index = 0; index < bsPopover.length; index++) {
                 var popover = new bootstrap.Popover(bsPopover[index])
             }
         },
-        onCheckandChangeSidebarActiveClass: function() {
+        onCheckandChangeSidebarActiveClass: function () {
             if (document.body.classList.contains('alt-menu')) {
                 document.querySelector('.sidebar-wrapper li.menu.active [aria-expanded="true"]').setAttribute('aria-expanded', 'false');
             }
         },
-        MaterialRippleEffect: function() {
+        MaterialRippleEffect: function () {
             getAllBtn = document.querySelectorAll('button.btn, a.btn');
-            
+
             getAllBtn.forEach(btn => {
-    
+
                 if (!btn.classList.contains('_no--effects')) {
                     btn.classList.add('_effect--ripple');
                 }
-                
+
             });
-    
+
             if (document.querySelector('._effect--ripple')) {
                 Waves.attach('._effect--ripple', 'waves-light');
                 Waves.init();
             }
         },
-        functionalDropdown: function() {
+        functionalDropdown: function () {
             var getDropdownElement = document.querySelectorAll('.more-dropdown .dropdown-item');
             for (var i = 0; i < getDropdownElement.length; i++) {
-                getDropdownElement[i].addEventListener('click', function() {
+                getDropdownElement[i].addEventListener('click', function () {
                     document.querySelectorAll('.more-dropdown .dropdown-toggle > span')[0].innerText = this.getAttribute('data-value');
                 })
             }
         },
-        EnableNavBarPopper: function() {
-            window.bootstrap.Dropdown.prototype._detectNavbar = function(){ return false; };
+        EnableNavBarPopper: function () {
+            window.bootstrap.Dropdown.prototype._detectNavbar = function () {
+                return false;
+            };
         }
     }
 
     var _mobileResolution = {
-        onRefresh: function() {
+        onRefresh: function () {
             var windowWidth = window.innerWidth;
-            if ( windowWidth <= MediaSize.md ) {
+            if (windowWidth <= MediaSize.md) {
                 categoryScroll.scrollCat();
                 toggleFunction.sidebar();
             }
         },
-        
-        onResize: function() {
-            window.addEventListener('resize', function(event) {
+
+        onResize: function () {
+            window.addEventListener('resize', function (event) {
                 event.preventDefault();
                 var windowWidth = window.innerWidth;
-                if ( windowWidth <= MediaSize.md ) {
+                if (windowWidth <= MediaSize.md) {
                     toggleFunction.offToggleSidebarSubmenu();
                 }
             });
         }
-        
+
     }
 
     var _desktopResolution = {
-        onRefresh: function() {
+        onRefresh: function () {
             var windowWidth = window.innerWidth;
-            if ( windowWidth > MediaSize.md ) {
+            if (windowWidth > MediaSize.md) {
                 categoryScroll.scrollCat();
                 toggleFunction.sidebar();
                 toggleFunction.onToggleSidebarSubmenu();
             }
         },
-        
-        onResize: function() {
-            window.addEventListener('resize', function(event) {
+
+        onResize: function () {
+            window.addEventListener('resize', function (event) {
                 event.preventDefault();
                 var windowWidth = window.innerWidth;
-                if ( windowWidth > MediaSize.md ) {
+                if (windowWidth > MediaSize.md) {
                     toggleFunction.onToggleSidebarSubmenu();
                 }
             });
         }
-        
+
     }
 
     function sidebarFunctionality() {
         function sidebarCloser() {
 
-            if (window.innerWidth <= 991 ) {
+            if (window.innerWidth <= 991) {
 
                 if (!document.querySelector('body').classList.contains('alt-menu')) {
 
@@ -406,7 +410,7 @@ var App = function() {
                     Dom.main.classList.remove('sidebar-noneoverflow');
                 }
 
-            } else if (window.innerWidth > 991 ) {
+            } else if (window.innerWidth > 991) {
 
                 if (!document.querySelector('body').classList.contains('alt-menu')) {
 
@@ -427,32 +431,32 @@ var App = function() {
         }
 
         function sidebarMobCheck() {
-            if (window.innerWidth <= 991 ) {
+            if (window.innerWidth <= 991) {
 
-                if ( document.querySelector('.meetings-container').classList.contains('sbar-open') ) {
+                if (document.querySelector('.meetings-container').classList.contains('sbar-open')) {
                     return;
                 } else {
                     sidebarCloser()
                 }
-            } else if (window.innerWidth > 991 ) {
+            } else if (window.innerWidth > 991) {
                 sidebarCloser();
             }
         }
 
         sidebarCloser();
 
-        window.addEventListener('resize', function(event) {
+        window.addEventListener('resize', function (event) {
             sidebarMobCheck();
         });
 
     }
 
     return {
-        init: function(Layout) {
+        init: function (Layout) {
             toggleFunction.overlay();
             toggleFunction.search();
             toggleFunction.themeToggle(Layout);
-            
+
             /*
                 Desktop Resoltion fn
             */
@@ -485,6 +489,6 @@ var App = function() {
 
 }();
 
-window.addEventListener('load', function() {
+window.addEventListener('load', function () {
     App.init('layout');
 })
