@@ -73,12 +73,12 @@ class RoomDetail(View):
             has_error = False
             form.save()
 
-            context = {'room': room, 'user': request.user, 'form': self.form_class,
+            context = {'comments': comments, 'room': room, 'user': request.user, 'form': self.form_class,
                        'meetings': json.dumps(self.get_room_meetings(id),
                                               cls=CustomJSONEncoder), 'has_error': has_error}
             return render(request, 'meeting/room_detail.html', context)
         else:
-            context = {'room': room, 'user': request.user, 'form': forms,
+            context = {'comments': comments, 'room': room, 'user': request.user, 'form': forms,
                        'meetings': json.dumps(self.get_room_meetings(id),
                                               cls=CustomJSONEncoder), 'has_error': has_error}
             return render(request, 'meeting/room_detail.html', context)
