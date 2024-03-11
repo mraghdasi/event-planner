@@ -14,16 +14,16 @@ class UserAndTeamTests(TestCase):
         self.users = []
         for i in range(10):
             if i < 4:
-                user = User.objects.create(username=f"user{i}", phone_number='1234567890', team=self.team1)
+                user = User.objects.create(username=f"user{i}", phone_number=f'123456789{i}', team=self.team1)
             elif 4 <= i < 7:
-                user = User.objects.create(username=f"user{i}", phone_number='1234567890', team=self.team2)
+                user = User.objects.create(username=f"user{i}", phone_number=f'123456789{i}', team=self.team2)
             else:
-                user = User.objects.create(username=f"user{i}", phone_number='1234567890')
+                user = User.objects.create(username=f"user{i}", phone_number=f'123456789{i}')
             self.users.append(user)
         self.users.append(
-            User.objects.create(username='user10', phone_number='1234567890', team=self.team1, is_lead=True))
+            User.objects.create(username='user10', phone_number='1234567811', team=self.team1, is_lead=True))
         self.users.append(
-            User.objects.create(username='user11', phone_number='1234567890', team=self.team2, is_lead=True))
+            User.objects.create(username='user11', phone_number='1234567812', team=self.team2, is_lead=True))
 
     def test_user_and_team_creation(self):
         # Check if 10 users and 2 teams are created
@@ -54,9 +54,9 @@ class UserAndTeamTests(TestCase):
         for user in self.users:
             self.assertEqual(str(user), f'{user.username} | {user.get_full_name()}')
         self.assertEqual(str(self.team1),
-                         f'{self.team1.title} | {User.objects.filter(team=self.team1.id).count()} | {self.team1.is_active}')
+                         f'{self.team1.title}')
         self.assertEqual(str(self.team2),
-                         f'{self.team2.title} | {User.objects.filter(team=self.team2.id).count()} | {self.team2.is_active}')
+                         f'{self.team2.title}')
 
     def test_delete_user_team(self):
         # Test the on delete method

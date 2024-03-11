@@ -52,8 +52,6 @@ def sign_up(request):
             user = form.save()
             request.session['phone_number'] = user.phone_number
             return redirect('phone_auth')
-        else:
-            messages.error(request, form.errors, 'danger')
     else:
         form = SignUpForm()
     return render(request, 'users/sign_up.html', {'form': form})

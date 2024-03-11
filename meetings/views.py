@@ -7,7 +7,6 @@ from django.views import View
 from django.db.models import Count
 from django.contrib import messages
 
-
 from meetings.forms import MeetingForm
 from meetings.models import Room, Meeting
 
@@ -58,7 +57,8 @@ class RoomDetail(View):
             room = room[0]
 
         return render(request, 'meeting/room_detail.html',
-                      {'room': room, 'user': request.user, 'form': self.form_class, 'meetings': json.dumps(self.get_room_meetings(id), cls=CustomJSONEncoder)})
+                      {'room': room, 'user': request.user, 'form': self.form_class,
+                       'meetings': json.dumps(self.get_room_meetings(id), cls=CustomJSONEncoder)})
 
     def post(self, request, *args, **kwargs):
 
@@ -73,12 +73,13 @@ class RoomDetail(View):
             form.save()
 
             context = {'room': forms.cleaned_data.get('room'), 'user': request.user, 'form': self.form_class,
-                       'meetings': json.dumps(self.get_room_meetings(forms.cleaned_data.get('room')), cls=CustomJSONEncoder), 'has_error': has_error}
+                       'meetings': json.dumps(self.get_room_meetings(forms.cleaned_data.get('room')),
+                                              cls=CustomJSONEncoder), 'has_error': has_error}
             return render(request, 'meeting/room_detail.html', context)
         else:
             for error in forms.errors:
                 messages.error(request, error)
             context = {'room': forms.cleaned_data.get('room'), 'user': request.user, 'form': forms,
-                       'meetings': json.dumps(self.get_room_meetings(forms.cleaned_data.get('room')), cls=CustomJSONEncoder), 'has_error': has_error}
+                       'meetings': json.dumps(self.get_room_meetings(forms.cleaned_data.get('room')),
+                                              cls=CustomJSONEncoder), 'has_error': has_error}
             return render(request, 'meeting/room_detail.html', context)
-
