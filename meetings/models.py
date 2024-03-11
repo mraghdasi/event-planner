@@ -26,7 +26,7 @@ class Room(models.Model):
         return range((5 - self.avg_rate()))
 
     def __str__(self):
-        return f'{self.title} | {self.is_active}'
+        return f'{self.title}'
 
 
 class Meeting(models.Model):
@@ -58,10 +58,10 @@ class CommentRoom(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
     def get_fill_star_range(self):
-        return range(self.rate)
+        return range(1, self.rate + 1)
 
     def get_gray_star_range(self):
-        return range((5 - self.rate))
+        return range(self.rate + 1, 6)
 
     def __str__(self):
         return f'{self.room.title} | {self.user.username} | {self.rate}'
