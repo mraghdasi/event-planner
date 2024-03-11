@@ -252,10 +252,9 @@
                 allDaySlot: false,
                 selectHelper: true,
                 select: function (start, end, allDay) {
-                    console.log(start, end, allDay);
                     const isLead = `{{ user.is_lead }}` === 'True'
 
-                    if (isLead) {
+                    if (isLead && new Date(start) >=  new Date().setHours(0, 0, 0, 0).toString()) {
                         const modal = document.getElementById('eventModal')
                         modal.style.display = 'block'
                         document.getElementById('id_start_date').value = converterDataParaDjangoFormat(start);
