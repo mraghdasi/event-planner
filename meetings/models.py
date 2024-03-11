@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.utils import timezone
 
 
 class Room(models.Model):
@@ -19,6 +20,16 @@ class Meeting(models.Model):
     room = models.ForeignKey('meetings.Room', related_name='meetings', on_delete=models.CASCADE)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
+
+    def get_status(self):
+        now = timezone.now()
+        if now >= self.end_date:
+            return 'Passed'
+        else:
+            if now >= self.start_date:
+                return 'Ongoing'
+            else:
+                return 'Reserved'
 
     def __str__(self):
         return f'{self.id} | {self.title} | {self.team.title} | {self.room.title}'

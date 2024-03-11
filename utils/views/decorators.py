@@ -27,3 +27,17 @@ def admin_required(view_func):
             return redirect('meeting:room_list')
 
     return wrapper
+
+
+def admin_or_lead_required(view_func):
+    """
+    Decorator for views that checks that the admin is logged in.
+    """
+
+    def wrapper(request, *args, **kwargs):
+        if request.user.is_superuser or request.user.is_lead:
+            return view_func(request, *args, **kwargs)
+        else:
+            return redirect('meeting:room_list')
+
+    return wrapper

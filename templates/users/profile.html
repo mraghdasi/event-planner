@@ -15,8 +15,25 @@
             font-size: 16px;
         }
 
+        .general-info {
+            background-color: #fff;
+            border-radius: 6px;
+        }
+
+        .info {
+            padding: 20px;
+        }
+
+
+        label {
+            color: #515365;
+            letter-spacing: 1px;
+        }
+
     </style>
     <link rel="stylesheet" type="text/css" href="https://jeremyfagis.github.io/dropify/dist/css/dropify.min.css">
+    <link rel="stylesheet" href="{% static 'src/assets/css/datatables.min.css' %}">
+
 {% endblock %}
 
 {% block breadcrumb %}
@@ -48,7 +65,39 @@
 
     <div class="account-content">
 
+        <div class="row mb-3">
+            <div class="col-md-12">
 
+                <ul class="nav nav-pills" id="animateLine" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="animated-underline-home-tab" data-bs-toggle="tab"
+                                href="#animated-underline-home" role="tab" aria-controls="animated-underline-home"
+                                aria-selected="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                 stroke-linejoin="round" class="feather feather-home">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                            </svg>
+                            Home
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="animated-underline-profile-tab" data-bs-toggle="tab"
+                                href="#animated-underline-profile" role="tab" aria-controls="animated-underline-profile"
+                                aria-selected="false" tabindex="-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                 stroke-linejoin="round" class="feather feather-dollar-sign">
+                                <line x1="12" y1="1" x2="12" y2="23"></line>
+                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                            </svg>
+                            My Meetings
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
         <div class="tab-content" id="animateLineContent-4">
             <div class="tab-pane fade active show" id="animated-underline-home" role="tabpanel"
                  aria-labelledby="animated-underline-home-tab">
@@ -141,6 +190,53 @@
                     </div>
                 </div>
             </div>
+
+            <div class="tab-pane fade" id="animated-underline-profile" role="tabpanel"
+                 aria-labelledby="animated-underline-profile-tab">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 layout-spacing">
+                        <div class="section general-info">
+                            <div class="info">
+                                <h6 class="">Meetings Information</h6>
+                                <div class="table-responsive">
+                                    <table id="example1" class="table table-bordered table-striped datatable_custom">
+                                        <thead>
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Team</th>
+                                            <th>Room</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                            <th>Status</th>
+                                            {% if user.is_lead or user.is_superuser %}
+                                                <th>Edit</th>{% endif %}
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for meeting in meetings %}
+                                            <tr>
+                                                <td>{{ meeting.title }}</td>
+                                                <td>{{ meeting.team.title }}</td>
+                                                <td>{{ meeting.room.title }}</td>
+                                                <td>{{ meeting.start_date|date:"Y-m-d H:i" }}</td>
+                                                <td>{{ meeting.end_date|date:"Y-m-d H:i" }}</td>
+                                                <td>{% if meeting.get_status == 'Passed' %}
+                                                    <a href="#">{{ meeting.get_status }}</a>{% else %}
+                                                    {{ meeting.get_status }}{% endif %}</td>
+                                                {% if user.is_lead or user.is_superuser %}
+                                                    <td><a href="{% url 'edit_meeting' pk=meeting.id %}">Edit</a>
+                                                    </td>{% endif %}
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
@@ -181,4 +277,26 @@
 
 
     </script>
+
+    <script src="{% static 'src/assets/js/datatables.min.js' %}"></script>
+    <script>
+        $('.datatable_custom').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            'paging': true,
+            'lengthChange': true,
+            'searching': true,
+            'ordering': true,
+            'autoWidth': true,
+            "order": [],
+            "pageLength": 10,
+            lengthMenu: [
+                [10, 25, 50, -1],
+                [10, 25, 50, 'All']
+            ],
+        });
+    </script>
+
 {% endblock %}

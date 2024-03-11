@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.utils.datastructures import MultiValueDictKeyError
 
+from meetings.models import Meeting
 from users.forms import ProfileForm, SignUpForm, LoginForm, CustomPasswordResetForm
 
 
@@ -141,14 +142,14 @@ def sign_out(request):
 
 @login_required(login_url='sign_in')
 def profile(request):
+    meetings = Meeting.objects.filter(team=request.user.team)
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
             messages.success(request, 'User Updated Successfully!', 'success')
-            return redirect('profile')
         else:
             messages.error(request, 'Error updating User. Please check the form.', 'danger')
     else:
         form = ProfileForm(instance=request.user)
-    return render(request, 'users/profile.html', {'form': form})
+    return render(request, 'users/profile.html', {'form': form, 'meetings': meetings})

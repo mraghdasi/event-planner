@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from admin_dash.forms import EditUserForm, TeamForm, RoomForm, MeetingForm
 from meetings.models import Room, Meeting
 from users.models import User, Team
-from utils.views.decorators import login_required_custom, admin_required
+from utils.views.decorators import login_required_custom, admin_required, admin_or_lead_required
 
 
 @login_required_custom
@@ -121,7 +121,7 @@ def add_room(request):
 
 
 @login_required_custom
-@admin_required
+@admin_or_lead_required
 def edit_meeting(request, pk):
     meeting = Meeting.objects.get(id=pk)
     if request.method == 'POST':
