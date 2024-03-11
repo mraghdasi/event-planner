@@ -109,8 +109,10 @@ class CustomPasswordResetForm(forms.Form):
     new_password2 = forms.CharField(label='Confirm New Password', widget=forms.PasswordInput(
         attrs={'class': 'form-control'}))
 
-    def clean_password(self):
-        password = self.cleaned_data['new_password1']
+    def clean_new_password1(self):
+        password = self.cleaned_data.get('new_password1')
+        if not password:
+            raise forms.ValidationError("Please enter a password.")
         if not re.match(r"^.{8,255}$", password):
             raise forms.ValidationError("Password should be at least 8 characters long.")
         if not re.search(r"(.*[!@#$%^&*()_+\-=\[\]{};':\"\\,.<>?].*)+", password):
@@ -121,12 +123,21 @@ class CustomPasswordResetForm(forms.Form):
             raise forms.ValidationError("Password should have at least two digits")
         return password
 
-    def clean_password_confirm(self):
-        password_confirm = self.cleaned_data['new_password2']
-        password = self.cleaned_data['new_password1']
-        if not compare_digest(password, password_confirm):
+    def clean_new_password2(self):
+        password_confirm = self.cleaned_data.get('new_password2')
+        if not password_confirm:
+            raise forms.ValidationError("Please confirm your password.")
+        password = self.cleaned_data.get('new_password1')
+        if password != password_confirm:
             raise forms.ValidationError("Passwords do not match")
         return password_confirm
+
+    def clean(self):
+        cleaned_data = super().clean()
+        new_password1 = cleaned_data.get('new_password1')
+        new_password2 = cleaned_data.get('new_password2')
+        if new_password1 and new_password2 and new_password1 != new_password2:
+            raise forms.ValidationError("Passwords do not match")
 
 
 class ProfileForm(ModelForm):

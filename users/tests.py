@@ -2,7 +2,7 @@ from django.contrib.messages import get_messages
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.utils import timezone
-
+from .forms import SignUpForm, CustomPasswordResetForm, ProfileForm
 from meetings.models import Meeting, Room
 from .models import User, Team
 
@@ -181,3 +181,133 @@ class ProfileViewTestCase(TestCase):
         response = self.client.get(reverse('profile'))
 
         self.assertEqual(response.context['meetings'].count(), 1)
+
+
+class SignUpFormTest(TestCase):
+    def test_valid_form(self):
+        form_data = {
+            'username': 'testuser',
+            'first_name': 'John',
+            'last_name': 'Doe',
+            'email': 'test@example.com',
+            'phone_number': '09195449241',
+            'password1': 'RetR0_p612',
+            'password2': 'RetR0_p612',
+            'image': None
+        }
+        form = SignUpForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_invalid_form(self):
+        invalid_data = [
+            {
+                'username': 'short',
+                'first_name': 'John',
+                'last_name': 'Doe',
+                'email': 'test@example.com',
+                'phone_number': '09121231234',
+                'password1': 'Password123',
+                'password2': 'Password123',
+                'image': None
+            },
+            {
+                'username': 'testuser',
+                'first_name': 'John',
+                'last_name': 'Doe',
+                'email': 'invalidemail',
+                'phone_number': '09121231234',
+                'password1': 'Password123',
+                'password2': 'Password123',
+                'image': None
+            },
+            {
+                'username': 'testuser',
+                'first_name': 'John',
+                'last_name': 'Doe',
+                'email': 'validemail@valid.com',
+                'phone_number': '091214',
+                'password1': 'Password123',
+                'password2': 'Password123',
+                'image': None
+            },
+            {
+                'username': 'یوزر بد',
+                'first_name': 'John',
+                'last_name': 'Doe',
+                'email': 'validemail@valid.com',
+                'phone_number': '091214',
+                'password1': 'Password123',
+                'password2': 'Password123',
+                'image': None
+            },
+
+        ]
+        for data in invalid_data:
+            form = SignUpForm(data=data)
+            self.assertFalse(form.is_valid())
+
+
+class CustomPasswordResetFormTest(TestCase):
+    def test_valid_form(self):
+        form_data = {
+            'new_password1': 'RetR0_p612',
+            'new_password2': 'RetR0_p612',
+        }
+        form = CustomPasswordResetForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_invalid_form(self):
+        invalid_data = [
+            {
+                'new_password1': 'p',
+                'new_password2': 'p',
+            },
+            {
+                'new_password1': 'Password123',
+                'new_password2': 'DifferentPassword123',
+            },
+            {
+                'new_password1': 'password',
+                'new_password2': 'password',
+            },
+            {
+                'new_password1': 'RetRO_ppp',
+                'new_password2': 'RetRO_ppp',
+            },
+            {
+                'new_password1': 'behdad1383__',
+                'new_password2': 'behdad1383__',
+            },
+        ]
+        for data in invalid_data:
+            form = CustomPasswordResetForm(data=data)
+            self.assertFalse(form.is_valid())
+
+
+class ProfileFormTest(TestCase):
+    def test_valid_form(self):
+        form_data = {
+            'username': 'testuser',
+            'email': 'test@example.com',
+            'first_name': 'John',
+            'last_name': 'Doe',
+            'phone_number': '09121231234',
+            'image': None
+        }
+        form = ProfileForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_invalid_form(self):
+        invalid_data = [
+            {
+                'username': 'بشسبشسب',
+                'email': 'invalidemail',
+                'first_name': 'یشسسیشسیشسی',
+                'last_name': '',
+                'phone_number': '0912123',
+                'image': None
+            },
+        ]
+        for data in invalid_data:
+            form = ProfileForm(data=data)
+            self.assertFalse(form.is_valid())
