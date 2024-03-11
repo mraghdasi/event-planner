@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.db.models import Avg
 from django.utils import timezone
 
 
@@ -9,6 +10,20 @@ class Room(models.Model):
     is_active = models.BooleanField(default=True)
     capacity = models.IntegerField(default=0)
     description = models.TextField(null=True, blank=True, max_length=2000)
+
+    def avg_rate(self):
+        avg_rating = self.comments.aggregate(avg_rating=Avg('rate'))['avg_rating']
+        if avg_rating:
+            avg_rating = round(avg_rating)
+            return avg_rating
+        else:
+            return 0
+
+    def get_fill_star_range(self):
+        return range(self.avg_rate())
+
+    def get_gray_star_range(self):
+        return range((5 - self.avg_rate()))
 
     def __str__(self):
         return f'{self.title} | {self.is_active}'
@@ -40,6 +55,13 @@ class CommentRoom(models.Model):
     room = models.ForeignKey('meetings.Room', related_name='comments', on_delete=models.CASCADE)
     body = models.TextField()
     rate = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    date = models.DateTimeField(auto_now_add=True)
+
+    def get_fill_star_range(self):
+        return range(self.rate)
+
+    def get_gray_star_range(self):
+        return range((5 - self.rate))
 
     def __str__(self):
         return f'{self.room.title} | {self.user.username} | {self.rate}'
