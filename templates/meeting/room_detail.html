@@ -84,6 +84,12 @@
 
     <hr class="tw-my-10">
 
+    <div>
+        {% include 'meeting/comments.html' with comments=comments %}
+    </div>
+
+    <hr class="tw-my-10">
+
     <div id='calendar'></div>
 
     <div class="modal fade show" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -107,17 +113,12 @@
                 </div>
                 <form method="post">
                     {% csrf_token %}
+                    <div class="tw-p-3">
+                        <label for="{{ form.title.id_for_label }}" class="tw-block tw-text-gray-700 tw-text-sm tw-font-bold tw-mb-2">Title:</label>
+                        {{ form.title }}
+                    </div>
+
                     <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-p-3">
-                        <div>
-                            <label for="{{ form.title.id_for_label }}" class="tw-block tw-text-gray-700 tw-text-sm tw-font-bold tw-mb-2">Title:</label>
-                            {{ form.title }}
-                        </div>
-
-                        <div>
-                            <label for="{{ form.team.id_for_label }}" class="tw-block tw-text-gray-700 tw-text-sm tw-font-bold tw-mb-2">Team:</label>
-                            {{ form.team }}
-                        </div>
-
                         <div>
                             <label for="{{ form.start_date.id_for_label }}" class="tw-block tw-text-gray-700 tw-text-sm tw-font-bold tw-mb-2">Start Date:</label>
                             {{ form.start_date }}
@@ -129,7 +130,21 @@
                         </div>
 
                         <input type="hidden" name="room" value="{{ room.id }}">
+                        <input type="hidden" name="team" value="{{ user.team.id }}">
                     </div>
+
+                    {% if form.errors.items %}
+                        <div class="alert alert-danger alert-dismissible tw-m-3">
+                            {% for item,value in form.errors.items %}
+                                {% if item != '__all__' %}
+                                    <span>{{ item }} : {{ value }}</span>
+                                {% else %}
+                                    <span>{{ value }}</span>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
                     <div class="modal-footer">
                         <button id="closeBtn1" type="button" class="btn btn-danger tw-bg-red-700">Close</button>
                         <button type="submit" class="btn tw-bg-blue-800 text-white">Save</button>
@@ -257,15 +272,4 @@
 
     </script>
 
-{% endblock %}
-
-
-{% block toast-class %}
-    {{ block.super }}
-    {% if form.non_field_errors %}
-        !flex
-    {% endif %}
-{% endblock %}
-{% block toast-messege %}
-    {{ form.non_field_errors }}
 {% endblock %}

@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Count
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 
 from meetings.forms import MeetingForm, CommentRoomForm
@@ -41,41 +41,48 @@ class RoomDetail(View):
 
         return meetings
 
-    def get(self, request, id):
-        room = Room.objects.filter(id=id).annotate(meeting_count=Count('meetings'))
+    @staticmethod
+    def get_room(room_id: int):
+        room = Room.objects.filter(id=room_id).annotate(meeting_count=Count('meetings'))
 
         if not room.exists():
             room = None
+            comments = None
         else:
             room = room[0]
+            comments = room.comments.all()
+
+        return room, comments
+
+    def get(self, request, id):
+        room, comments = self.get_room(id)
 
         return render(request, 'meeting/room_detail.html',
-                      {'room': room, 'user': request.user, 'form': self.form_class,
+                      {'comments': comments, 'room': room, 'user': request.user, 'form': self.form_class,
                        'meetings': json.dumps(self.get_room_meetings(id), cls=CustomJSONEncoder)})
 
-    def post(self, request, *args, **kwargs):
 
-        forms = self.form_class(request.POST)
+def post(self, request, id, *args, **kwargs):
+    forms = self.form_class(request.POST)
+    room, comments = self.get_room(id)
 
-        has_error = True
-        if forms.is_valid():
-            form = forms.save(commit=False)
-            form.user = request.user
-            form.room = forms.cleaned_data.get('room')
-            has_error = False
-            form.save()
+    has_error = True
+    if forms.is_valid():
+        form = forms.save(commit=False)
+        form.user = request.user
+        form.room = forms.cleaned_data.get('room')
+        has_error = False
+        form.save()
 
-            context = {'room': forms.cleaned_data.get('room'), 'user': request.user, 'form': self.form_class,
-                       'meetings': json.dumps(self.get_room_meetings(forms.cleaned_data.get('room')),
-                                              cls=CustomJSONEncoder), 'has_error': has_error}
-            return render(request, 'meeting/room_detail.html', context)
-        else:
-            for error in forms.errors:
-                messages.error(request, error)
-            context = {'room': forms.cleaned_data.get('room'), 'user': request.user, 'form': forms,
-                       'meetings': json.dumps(self.get_room_meetings(forms.cleaned_data.get('room')),
-                                              cls=CustomJSONEncoder), 'has_error': has_error}
-            return render(request, 'meeting/room_detail.html', context)
+        context = {'room': room, 'user': request.user, 'form': self.form_class,
+                   'meetings': json.dumps(self.get_room_meetings(id),
+                                          cls=CustomJSONEncoder), 'has_error': has_error}
+        return render(request, 'meeting/room_detail.html', context)
+    else:
+        context = {'room': room, 'user': request.user, 'form': forms,
+                   'meetings': json.dumps(self.get_room_meetings(id),
+                                          cls=CustomJSONEncoder), 'has_error': has_error}
+        return render(request, 'meeting/room_detail.html', context)
 
 
 @login_required(login_url='sign_in')
@@ -87,6 +94,7 @@ def create_comment(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, 'Comment Created Successfully!', 'success')
+            return redirect('profile')
         else:
             messages.error(request, 'Error Creating User. Please check the form.', 'danger')
     else:

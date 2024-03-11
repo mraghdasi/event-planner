@@ -1,5 +1,4 @@
 from django import forms
-from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 
 from meetings.models import Meeting, CommentRoom
@@ -15,8 +14,8 @@ class MeetingForm(ModelForm):
         fields = ('title', 'team', 'room', 'start_date', 'end_date')
         widgets = {
             'title': forms.TextInput(attrs={'class': 'tw-w-full'}),
-            'team': forms.Select(attrs={'class': 'tw-w-full'}),
             'room': forms.HiddenInput(),
+            'team': forms.HiddenInput(),
             'start_date': forms.DateInput(
                 format=('%d/%m/%Y %H:%M'),
                 attrs={'class': 'tw-w-full',
@@ -36,7 +35,7 @@ class MeetingForm(ModelForm):
         room = cleaned_data.get('room')
 
         if start_date and end_date and start_date >= end_date:
-            raise ValidationError("End date must be later than start date")
+            raise forms.ValidationError("End date must be later than start date")
 
         if start_date and end_date and room:
             overlapping_meetings = Meeting.objects.filter(
