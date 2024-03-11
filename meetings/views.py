@@ -61,28 +61,27 @@ class RoomDetail(View):
                       {'comments': comments, 'room': room, 'user': request.user, 'form': self.form_class,
                        'meetings': json.dumps(self.get_room_meetings(id), cls=CustomJSONEncoder)})
 
+    def post(self, request, id, *args, **kwargs):
+        forms = self.form_class(request.POST)
+        room, comments = self.get_room(id)
 
-def post(self, request, id, *args, **kwargs):
-    forms = self.form_class(request.POST)
-    room, comments = self.get_room(id)
+        has_error = True
+        if forms.is_valid():
+            form = forms.save(commit=False)
+            form.user = request.user
+            form.room = forms.cleaned_data.get('room')
+            has_error = False
+            form.save()
 
-    has_error = True
-    if forms.is_valid():
-        form = forms.save(commit=False)
-        form.user = request.user
-        form.room = forms.cleaned_data.get('room')
-        has_error = False
-        form.save()
-
-        context = {'room': room, 'user': request.user, 'form': self.form_class,
-                   'meetings': json.dumps(self.get_room_meetings(id),
-                                          cls=CustomJSONEncoder), 'has_error': has_error}
-        return render(request, 'meeting/room_detail.html', context)
-    else:
-        context = {'room': room, 'user': request.user, 'form': forms,
-                   'meetings': json.dumps(self.get_room_meetings(id),
-                                          cls=CustomJSONEncoder), 'has_error': has_error}
-        return render(request, 'meeting/room_detail.html', context)
+            context = {'room': room, 'user': request.user, 'form': self.form_class,
+                       'meetings': json.dumps(self.get_room_meetings(id),
+                                              cls=CustomJSONEncoder), 'has_error': has_error}
+            return render(request, 'meeting/room_detail.html', context)
+        else:
+            context = {'room': room, 'user': request.user, 'form': forms,
+                       'meetings': json.dumps(self.get_room_meetings(id),
+                                              cls=CustomJSONEncoder), 'has_error': has_error}
+            return render(request, 'meeting/room_detail.html', context)
 
 
 @login_required(login_url='sign_in')

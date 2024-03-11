@@ -28,7 +28,7 @@ def otp_generator(request):
 def phone_auth(request):
     phone_number = request.session.get('phone_number', default=None)
     if phone_number is None:
-        return redirect('')
+        return redirect('/')
     if request.method == 'POST':
         otp_entered = request.POST.get('otp')
         otp_generated = str(request.session.get('otp'))
@@ -85,7 +85,7 @@ def sign_in(request):
 def sign_in_otp_confirmation(request):
     phone_number = request.session.get('phone_number', default=None)
     if phone_number is None:
-        return redirect('')
+        return redirect('/')
     if request.method == 'POST':
         otp_entered = request.POST.get('otp')
         otp_generated = str(request.session.get('otp'))
@@ -123,7 +123,7 @@ def sign_in_otp(request):
 def rest_password_otp(request):
     phone_number = request.session.get('phone_number', default=None)
     if phone_number is None:
-        return redirect('')
+        return redirect('/')
     if request.method == 'POST':
         otp_entered = request.POST.get('otp')
         otp_generated = str(request.session.get('otp'))
