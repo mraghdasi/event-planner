@@ -1,13 +1,14 @@
-from django.forms import ModelForm
 from django import forms
 from django.core.exceptions import ValidationError
+from django.forms import ModelForm
 
-from meetings.models import Meeting, Room
+from meetings.models import Meeting, CommentRoom
 from users.models import Team
 
 
 class MeetingForm(ModelForm):
-    team = forms.ModelChoiceField(queryset=Team.objects.filter(is_active=True), widget=forms.Select(attrs={'class': 'tw-w-full'}))
+    team = forms.ModelChoiceField(queryset=Team.objects.filter(is_active=True),
+                                  widget=forms.Select(attrs={'class': 'tw-w-full'}))
 
     class Meta:
         model = Meeting
@@ -45,6 +46,34 @@ class MeetingForm(ModelForm):
             )
 
             if overlapping_meetings.exists():
-                raise forms.ValidationError("The selected time range overlaps with an existing meeting for the chosen room.")
+                raise forms.ValidationError(
+                    "The selected time range overlaps with an existing meeting for the chosen room.")
 
         return cleaned_data
+
+
+class CommentRoomForm(forms.ModelForm):
+    class Meta:
+        model = CommentRoom
+        fields = ['body', 'rate']
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        self.room = kwargs.pop('room', None)
+        super(CommentRoomForm, self).__init__(*args, **kwargs)
+
+        for field_name, field in self.fields.items():
+            if field_name == 'rate':
+                field.widget.attrs.update({'max': 5})
+                field.widget.attrs.update({'min': 0})
+            field.widget.attrs.update({'class': 'form-control mb-3'})
+
+    def save(self, commit=True):
+        instance = super(CommentRoomForm, self).save(commit=False)
+        if self.user:
+            instance.user = self.user
+        if self.room:
+            instance.room = self.room
+        if commit:
+            instance.save()
+        return instance

@@ -2,12 +2,13 @@ import json
 from datetime import datetime
 
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Count
 from django.shortcuts import render
 from django.views import View
 
-from meetings.forms import MeetingForm
+from meetings.forms import MeetingForm, CommentRoomForm
 from meetings.models import Room, Meeting
 
 
@@ -75,3 +76,26 @@ class RoomDetail(View):
                        'meetings': json.dumps(self.get_room_meetings(forms.cleaned_data.get('room')),
                                               cls=CustomJSONEncoder), 'has_error': has_error}
             return render(request, 'meeting/room_detail.html', context)
+
+
+@login_required(login_url='sign_in')
+def create_comment(request, pk):
+    user = request.user
+    room = Room.objects.get(id=pk)
+    if request.method == 'POST':
+        form = CommentRoomForm(request.POST, user=user, room=room)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Comment Created Successfully!', 'success')
+        else:
+            messages.error(request, 'Error Creating User. Please check the form.', 'danger')
+    else:
+        form = CommentRoomForm(user=user, room=room)
+    return render(request, 'meeting/add_comment.html', {'form': form, })
+
+
+@login_required(login_url='sign_in')
+def room_comments(request, pk):
+    room = Room.objects.get(id=pk)
+    comments = room.comments.all()
+    return render(request, 'meeting/room_comments.html', {'comments': comments, 'room': room})

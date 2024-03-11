@@ -1,6 +1,5 @@
 from django.shortcuts import redirect
 
-
 def login_required_custom(view_func):
     """
     Decorator for views that checks that the admin is logged in.
