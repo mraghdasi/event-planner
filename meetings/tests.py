@@ -7,7 +7,9 @@ from django.utils import timezone
 
 from users.models import Team
 from .models import Room, Meeting, CommentRoom
-from .views import RoomList, RoomDetail, create_comment, room_comments
+
+from .forms import MeetingForm, CommentRoomForm
+from datetime import datetime, timedelta
 
 
 class MeetingModelTestCase(TestCase):
@@ -63,7 +65,6 @@ class CommentRoomModelTestCase(TestCase):
         self.assertEqual(list(self.comment.get_gray_star_range()), [5])
 
 
-
 class RoomListViewTestCase(TestCase):
     def test_room_list_view(self):
         # Create a user and log in
@@ -106,3 +107,70 @@ class RoomCommentsViewTestCase(TestCase):
 
         response = self.client.get(reverse('meeting:room_comments', args=[self.room.id]))
         self.assertEqual(response.status_code, 200)
+
+
+class FormsTestCase(TestCase):
+    def setUp(self):
+        self.team = Team.objects.create(title='Test Team', is_active=True)
+        self.room = Room.objects.create(title='Test Room', is_active=True, capacity=10, description='Test description')
+        self.meeting = Meeting.objects.create(
+            title='Test Meeting',
+            team=self.team,
+            room=self.room,
+            start_date=datetime.now() + timedelta(days=1),
+            end_date=datetime.now() + timedelta(days=2)
+        )
+
+    def test_meeting_form_valid_data(self):
+        form_data = {
+            'title': 'New Meeting',
+            'team': self.team.pk,
+            'room': self.room.pk,
+            'start_date': '2024-03-11T12:00',
+            'end_date': '2024-03-11T14:00',
+        }
+        form = MeetingForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_meeting_form_invalid_data(self):
+        form_data = {
+            'title': '',
+            'team': 'invalidteam',
+            'room': 'invalidroom',
+            'start_date': 'invaliddate',
+            'end_date': 'invaliddate',
+        }
+        form = MeetingForm(data=form_data)
+        self.assertFalse(form.is_valid())
+
+    def test_comment_room_form_valid_data(self):
+        form_data = {
+            'body': 'Test Comment',
+            'rate': 4,
+        }
+        form = CommentRoomForm(data=form_data, user=get_user_model(), room=self.room)
+        self.assertTrue(form.is_valid())
+
+    def test_comment_room_form_invalid_data(self):
+        form_data = {
+            'body': '',
+            'rate': 6,
+        }
+        form = CommentRoomForm(data=form_data, user=get_user_model(), room=self.room)
+        self.assertFalse(form.is_valid())
+
+    def test_comment_room_form_save(self):
+        form_data = {
+            'body': 'Test Comment',
+            'rate': 4,
+        }
+        user = get_user_model().objects.create_user(username='testuser', password='testpass')
+        form = CommentRoomForm(data=form_data, user=user, room=self.room)
+        self.assertTrue(form.is_valid())
+
+        comment = form.save()
+
+        self.assertEqual(comment.user, user)
+        self.assertEqual(comment.body, 'Test Comment')
+        self.assertEqual(comment.rate, 4)
+        self.assertEqual(comment.room, self.room)
