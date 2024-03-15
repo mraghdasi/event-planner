@@ -26,8 +26,11 @@ class EditUserForm(ModelForm):
         fields = ['username', 'email', 'first_name', 'last_name', 'phone_number', 'image', 'is_lead', 'team']
 
     def clean(self):
-        if self.cleaned_data['is_lead'] and not self.cleaned_data['team']:
-            raise forms.ValidationError('A Lead must have a team')
+        try:
+            if self.cleaned_data['is_lead'] and not self.cleaned_data['team']:
+                raise forms.ValidationError('A Lead must have a team')
+        except KeyError:
+            raise forms.ValidationError('Team Not Found')
 
 
 class TeamForm(ModelForm):
@@ -82,8 +85,15 @@ class MeetingForm(ModelForm):
         room = cleaned_data.get('room')
         team = cleaned_data.get('team')
 
-        room = Room.objects.get(title=room)
-        team = Team.objects.get(title=team)
+        try:
+            room = Room.objects.get(title=room)
+        except Room.DoesNotExist:
+            raise forms.ValidationError('Room does not exist')
+
+        try:
+            team = Team.objects.get(title=team)
+        except Team.DoesNotExist:
+            raise forms.ValidationError('Team does not exist')
 
         if team.get_population() > room.capacity:
             raise forms.ValidationError('This team has more members than the room capacity.')
@@ -92,7 +102,7 @@ class MeetingForm(ModelForm):
             raise forms.ValidationError("End date must be later than start date")
 
         if start_date < timezone.now() or end_date < timezone.now():
-            raise forms.ValidationError("You can't set a date that is passed")
+            raise forms.ValidationError("You can't set a date that is passed (timezone : UTC)")
 
         if start_date and end_date and room:
             overlapping_meetings = Meeting.objects.filter(

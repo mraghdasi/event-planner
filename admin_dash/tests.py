@@ -141,6 +141,8 @@ class FormsTestCase(TestCase):
     def test_room_form_valid_data(self):
         form_data = {
             'title': 'New Room',
+            'capacity': 100,
+            'description': 'salam chetori',
             'is_active': True,
         }
         form = RoomForm(data=form_data)
@@ -159,8 +161,8 @@ class FormsTestCase(TestCase):
             'title': 'New Meeting',
             'team': self.team.pk,
             'room': self.room.pk,
-            'start_date': '2024-03-11 12:00:00',
-            'end_date': '2024-03-11 14:00:00',
+            'start_date': '2024-03-20 12:00:00',  # Write this based on current date
+            'end_date': '2024-03-21 14:00:00',
         }
         form = MeetingForm(data=form_data)
         self.assertTrue(form.is_valid())

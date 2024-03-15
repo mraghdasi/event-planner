@@ -4,7 +4,7 @@ from image_optimizer.fields import OptimizedImageField
 
 
 class User(AbstractUser):
-    email = models.EmailField(unique=True)
+    email = models.EmailField(unique=True,blank=True,null=True)
     image = OptimizedImageField(upload_to='User', optimized_image_output_size=(120, 120),
                                 optimized_image_resize_method='cover', null=True, blank=True)
     phone_number = models.CharField(max_length=11, unique=True)

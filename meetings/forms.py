@@ -1,5 +1,6 @@
 from django import forms
 from django.forms import ModelForm
+from django.utils import timezone
 
 from meetings.models import Meeting, CommentRoom, Room
 from users.models import Team
@@ -35,14 +36,24 @@ class MeetingForm(ModelForm):
         room = cleaned_data.get('room')
         team = cleaned_data.get('team')
 
-        room = Room.objects.get(title=room)
-        team = Team.objects.get(title=team)
+        try:
+            room = Room.objects.get(title=room)
+        except Room.DoesNotExist:
+            raise forms.ValidationError('Room does not exist')
+
+        try:
+            team = Team.objects.get(title=team)
+        except Team.DoesNotExist:
+            raise forms.ValidationError('Team does not exist')
 
         if team.get_population() > room.capacity:
             raise forms.ValidationError('Your team has more members than the room capacity.')
 
         if start_date >= end_date:
             raise forms.ValidationError("End date must be later than start date")
+
+        if start_date < timezone.now() or end_date < timezone.now():
+            raise forms.ValidationError("You can't set a date that is passed (timezone : UTC)")
 
         if start_date and end_date and room:
             overlapping_meetings = Meeting.objects.filter(

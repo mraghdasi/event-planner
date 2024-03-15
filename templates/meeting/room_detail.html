@@ -55,8 +55,10 @@
 {% block content %}
     <div class="tw-text-center tw-font-bold tw-text-xl tw-pb-3 tw-border-b tw-mb-5 tw-flex tw-items-center tw-justify-between tw-space-x-8">
         <a href="{% url 'meeting:room_list' %}">
-            <svg class="tw-w-6 tw-h-6 tw-text-gray-800 tw-dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5H1m0 0 4 4M1 5l4-4"/>
+            <svg class="tw-w-6 tw-h-6 tw-text-gray-800 tw-dark:text-white" aria-hidden="true"
+                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M13 5H1m0 0 4 4M1 5l4-4"/>
             </svg>
         </a>
     </div>
@@ -92,13 +94,16 @@
 
     <div id='calendar'></div>
 
-    <div class="modal fade show" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal fade show" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="tw-bg-white tw-shadow-md tw-rounded modal-content">
                 <div class="modal-header bg-primary">
                     <h5 class="modal-title tw-text-white" id="exampleModalLongTitle">Add New Event</h5>
-                    <button id="modalClose1" type="button" class="tw-border-none tw-bg-transparent tw-cursor-pointer" data-dismiss="modal" aria-label="Close">
-                        <svg height="25px" width="25px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                    <button id="modalClose1" type="button" class="tw-border-none tw-bg-transparent tw-cursor-pointer"
+                            data-dismiss="modal" aria-label="Close">
+                        <svg height="25px" width="25px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+                             xmlns:xlink="http://www.w3.org/1999/xlink"
                              viewBox="0 0 26 26" xml:space="preserve">
                             <g>
                                 <path style="fill:#fff;" d="M21.125,0H4.875C2.182,0,0,2.182,0,4.875v16.25C0,23.818,2.182,26,4.875,26h16.25
@@ -114,18 +119,21 @@
                 <form method="post">
                     {% csrf_token %}
                     <div class="tw-p-3">
-                        <label for="{{ form.title.id_for_label }}" class="tw-block tw-text-gray-700 tw-text-sm tw-font-bold tw-mb-2">Title:</label>
+                        <label for="{{ form.title.id_for_label }}"
+                               class="tw-block tw-text-gray-700 tw-text-sm tw-font-bold tw-mb-2">Title:</label>
                         {{ form.title }}
                     </div>
 
                     <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-p-3">
                         <div>
-                            <label for="{{ form.start_date.id_for_label }}" class="tw-block tw-text-gray-700 tw-text-sm tw-font-bold tw-mb-2">Start Date:</label>
+                            <label for="{{ form.start_date.id_for_label }}"
+                                   class="tw-block tw-text-gray-700 tw-text-sm tw-font-bold tw-mb-2">Start Date:</label>
                             {{ form.start_date }}
                         </div>
 
                         <div>
-                            <label for="{{ form.end_date.id_for_label }}" class="tw-block tw-text-gray-700 tw-text-sm tw-font-bold tw-mb-2">End Date:</label>
+                            <label for="{{ form.end_date.id_for_label }}"
+                                   class="tw-block tw-text-gray-700 tw-text-sm tw-font-bold tw-mb-2">End Date:</label>
                             {{ form.end_date }}
                         </div>
 
@@ -195,9 +203,9 @@
 
         $(document).ready(function () {
             var date = new Date();
-            var d = date.getDate();
-            var m = date.getMonth();
-            var y = date.getFullYear();
+            var d = date.getUTCDate();
+            var m = date.getUTCMonth();
+            var y = date.getUTCFullYear();
 
             /*  className colors
 
@@ -254,7 +262,7 @@
                 select: function (start, end, allDay) {
                     const isLead = `{{ user.is_lead }}` === 'True'
 
-                    if (isLead && new Date(start) >=  new Date().setHours(0, 0, 0, 0).toString()) {
+                    if (isLead && new Date(start) >= new Date().setHours(0, 0, 0, 0).toString()) {
                         const modal = document.getElementById('eventModal')
                         modal.style.display = 'block'
                         document.getElementById('id_start_date').value = converterDataParaDjangoFormat(start);
