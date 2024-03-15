@@ -1,3 +1,7 @@
+import re
+
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
 from django.forms import ModelForm
 from django import forms
 from django.utils import timezone
