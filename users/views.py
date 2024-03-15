@@ -3,11 +3,13 @@ import random
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.utils.datastructures import MultiValueDictKeyError
 
 from meetings.models import Meeting
 from users.forms import ProfileForm, SignUpForm, LoginForm, CustomPasswordResetForm
+from users.models import Team
 
 
 def generate_otp():
@@ -186,3 +188,10 @@ def profile(request):
     else:
         form = ProfileForm(instance=request.user)
     return render(request, 'users/profile.html', {'form': form, 'meetings': meetings})
+
+
+def test_data(request):
+    for i in range(100, 201):
+        team = Team.objects.create(title=f'team {i}')
+        team.save()
+    return HttpResponse('<h1>Test Data</h1>')
