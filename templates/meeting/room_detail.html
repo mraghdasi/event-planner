@@ -191,12 +191,12 @@
 
         function converterDataParaDjangoFormat(data) {
             const dataJS = new Date(data);
-            const ano = dataJS.getFullYear();
-            const mes = (dataJS.getMonth() + 1).toString().padStart(2, '0');
-            const dia = dataJS.getDate().toString().padStart(2, '0');
-            const hora = dataJS.getHours().toString().padStart(2, '0');
-            const minuto = dataJS.getMinutes().toString().padStart(2, '0');
-            const segundo = dataJS.getSeconds().toString().padStart(2, '0');
+            const ano = dataJS.getUTCFullYear();
+            const mes = (dataJS.getUTCMonth() + 1).toString().padStart(2, '0');
+            const dia = dataJS.getUTCDate().toString().padStart(2, '0');
+            const hora = dataJS.getUTCHours().toString().padStart(2, '0');
+            const minuto = dataJS.getUTCMinutes().toString().padStart(2, '0');
+            const segundo = dataJS.getUTCSeconds().toString().padStart(2, '0');
             const formatoDjango = `${ano}-${mes}-${dia} ${hora}:${minuto}:${segundo}`;
             return formatoDjango;
         }
