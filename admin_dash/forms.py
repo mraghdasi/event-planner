@@ -25,6 +25,46 @@ class EditUserForm(ModelForm):
         model = User
         fields = ['username', 'email', 'first_name', 'last_name', 'phone_number', 'image', 'is_lead', 'team']
 
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if len(username) < 5:
+            raise forms.ValidationError("Username must be at least 5 characters long.")
+        if username.isdigit():
+            raise forms.ValidationError("Username cannot consist of only numbers.")
+        if not username.isascii():
+            raise forms.ValidationError("Username must contain English characters only.")
+        return username
+
+    def clean_first_name(self):
+        first_name = self.cleaned_data['first_name']
+        if not first_name.isalpha():
+            raise forms.ValidationError("Your first name must contain only letters.")
+        if not first_name.isascii():
+            raise forms.ValidationError("Your first name must be in English.")
+        return first_name
+
+    def clean_last_name(self):
+        last_name = self.cleaned_data['last_name']
+        if not last_name.isalpha():
+            raise forms.ValidationError("Your last name must contain only letters.")
+        if not last_name.isascii():
+            raise forms.ValidationError("Your last name must be in English.")
+        return last_name
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        try:
+            validate_email(email)
+        except ValidationError:
+            raise forms.ValidationError("Please enter a valid email address.")
+        return email
+
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data['phone_number']
+        if not re.match(r"^(09)([0-9]{9})$", phone_number):
+            raise forms.ValidationError("Enter a valid phone number.")
+        return phone_number
+
     def clean(self):
         try:
             if self.cleaned_data['is_lead'] and not self.cleaned_data['team']:
