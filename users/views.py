@@ -188,10 +188,3 @@ def profile(request):
     else:
         form = ProfileForm(instance=request.user)
     return render(request, 'users/profile.html', {'form': form, 'meetings': meetings})
-
-
-def test_data(request):
-    for i in range(100, 201):
-        team = Team.objects.create(title=f'team {i}')
-        team.save()
-    return HttpResponse('<h1>Test Data</h1>')
