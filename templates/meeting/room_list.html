@@ -60,7 +60,7 @@
                             <span class="tw-bg-blue-100 tw-text-blue-800 tw-text-xs tw-px-2.5 tw-py-0.5 tw-rounded tw-ms-3">{{ room.avg_rate }}</span>
                         </div>
                         <div class="tw-flex tw-items-center tw-rtl:space-x-reverse" style="float: right">
-                            <a href="{% url 'meeting:room_comments' pk=room.id %}">Comments</a>
+                            <a href="{% url 'meeting:room_comments' pk=room.id %}">Comments {{ room.comments.count }}</a>
                         </div>
                     </div>
                     <div class="tw-flex tw-items-center tw-justify-between tw-space-x-8">

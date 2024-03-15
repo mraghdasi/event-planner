@@ -229,7 +229,7 @@
                                                 <td>{% if meeting.get_status == 'Passed' %}
                                                     <a href="{% url 'meeting:create_comment' pk=meeting.room.id %}">{{ meeting.get_status }}</a>{% else %}
                                                     {{ meeting.get_status }}{% endif %}</td>
-                                                {% if user.is_lead or user.is_superuser %}
+                                                {% if user.is_lead %}
                                                     <td><a href="{% url 'edit_meeting' pk=meeting.id %}">Edit</a>
                                                     </td>{% endif %}
                                             </tr>
