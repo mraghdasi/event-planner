@@ -35,6 +35,10 @@ class MeetingForm(ModelForm):
         end_date = cleaned_data.get('end_date')
         room = cleaned_data.get('room')
         team = cleaned_data.get('team')
+        title = cleaned_data.get('title')
+
+        if not title.isascii():
+            raise forms.ValidationError('Title should be English')
 
         try:
             room = Room.objects.get(title=room)
