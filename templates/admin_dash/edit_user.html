@@ -30,7 +30,7 @@
 
     <nav class="breadcrumb-style-one" aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Admin</a></li>
+            <li class="breadcrumb-item">Admin</li>
             <li class="breadcrumb-item active" aria-current="page">Edit User</li>
         </ol>
     </nav>
@@ -54,15 +54,14 @@
                  aria-labelledby="animated-underline-home-tab">
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 layout-spacing">
-                        {% if messages %}
-                            <div class="alert alert-dismissible" role="alert">
-                                {% for message in messages %}
-                                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show"
-                                         role="alert">
-                                        {{ message }}
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                                aria-label="Close"></button>
-                                    </div>
+                        {% if form.errors.items %}
+                            <div class="alert alert-danger alert-dismissible tw-m-3">
+                                {% for item,value in form.errors.items %}
+                                    {% if item != '__all__' %}
+                                        <span>{{ item }} : {{ value }}</span>
+                                    {% else %}
+                                        <span>{{ value }}</span>
+                                    {% endif %}
                                 {% endfor %}
                             </div>
                         {% endif %}

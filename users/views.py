@@ -73,10 +73,7 @@ def sign_in(request):
                 return render(request, 'users/sign_in.html',
                               {'form': form, 'error_message': 'Invalid username or password'})
         else:
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            print(username, password)
-            messages.error(request, form.errors, 'danger')
+            messages.error(request, "Form Couldn't be validated", 'danger')
     else:
         form = LoginForm(request)
     return render(request, 'users/sign_in.html', {'form': form})

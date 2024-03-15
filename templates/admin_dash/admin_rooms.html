@@ -12,6 +12,14 @@
     -->
     <link href="{% static 'src/assets/css/sweetalert2.min.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'src/assets/css/datatables.min.css' %}">
+    <style>
+        .ellipsis {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 100px;
+        }
+    </style>
 {% endblock %}
 
 {% block breadcrumb %}
@@ -25,7 +33,7 @@
 
     <nav class="breadcrumb-style-one" aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Admin</a></li>
+            <li class="breadcrumb-item">Admin</li>
             <li class="breadcrumb-item active" aria-current="page">Meetings</li>
         </ol>
     </nav>
@@ -40,30 +48,39 @@
     Note: Search Above Div in Page You Are Working With
     ========================================
     -->
+    <div class="col-12">
+        <a class="float-end" href="{% url 'add_room' %}">
+            <button class="btn btn-outline-success btn-icon mb-2 me-4">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                     class="feather feather-plus-square">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="12" y1="8" x2="12" y2="16"></line>
+                    <line x1="8" y1="12" x2="16" y2="12"></line>
+                </svg>
+            </button>
+        </a>
+    </div>
 
     <div class="table-responsive">
         <table id="example1" class="table table-bordered table-striped datatable_custom">
             <thead>
             <tr>
-                <th>Title</th>
-                <th>Team</th>
                 <th>Room</th>
-                <th>Start Date</th>
-                <th>End Date</th>
+                <th>Capacity</th>
+                <th>Description</th>
                 <th>Edit</th>
                 <th>Delete</th>
             </tr>
             </thead>
             <tbody>
-            {% for meeting in meetings %}
+            {% for room in rooms %}
                 <tr>
-                    <td>{{ meeting.title }}</td>
-                    <td>{{ meeting.team.title }}</td>
-                    <td>{{ meeting.room.title }}</td>
-                    <td>{{ meeting.start_date|date:"Y-m-d H:i" }}</td>
-                    <td>{{ meeting.end_date|date:"Y-m-d H:i" }}</td>
-                    <td><a href="{% url 'edit_meeting' pk=meeting.id %}">Edit</a></td>
-                    <td><a class="delete_api" data-url="{% url 'delete_meeting' pk=meeting.id %}">Delete</a></td>
+                    <td>{{ room.title }}</td>
+                    <td>{{ room.capacity }}</td>
+                    <td class="ellipsis">{{ room.description }}</td>
+                    <td><a href="{% url 'edit_room' pk=room.id %}">Edit</a></td>
+                    <td><a class="delete_api" data-url="{% url 'delete_room' pk=room.id %}">Delete</a></td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -109,7 +126,7 @@
             $('.delete_api').click(function () {
                 const element = $(this)
                 Swal.fire({
-                    title: 'Do you want to delete the meeting?',
+                    title: 'Do you want to delete the room?',
                     showDenyButton: true,
                     type: "warning",
                     showCancelButton: true,
@@ -124,7 +141,7 @@
                             success: function (data) {
                                 Swal.fire({
                                     title: 'successful',
-                                    text: 'Meeting Deleted Successfully',
+                                    text: 'Room Deleted Successfully',
                                     type: 'success',
                                     confirmButtonClass: 'btn btn-success',
                                     buttonsStyling: !1
@@ -144,7 +161,7 @@
                         });
 
                     } else if (result.dismiss) {
-                        Swal.fire('Meeting not deleted', '', 'info')
+                        Swal.fire('Room not deleted', '', 'info')
                     }
                 })
             })

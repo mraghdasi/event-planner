@@ -23,7 +23,7 @@
 
     <nav class="breadcrumb-style-one" aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Admin</a></li>
+            <li class="breadcrumb-item">Admin</li>
             <li class="breadcrumb-item active" aria-current="page">Add Room</li>
         </ol>
     </nav>
@@ -59,7 +59,8 @@
                                 {% endfor %}
                             </div>
                         {% endif %}
-                        <form class="section general-info" method="post" action="" enctype="multipart/form-data">
+                        <form class="section general-info" method="post" action="{% url 'add_room' %}"
+                              enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="info">
                                 <h6 class="">Room Information</h6>
@@ -80,11 +81,27 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
+                                                                {{ form.capacity.label_tag }}
+                                                                {{ form.capacity }}
+                                                                {{ form.capacity.errors }}
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                {{ form.description.label_tag }}
+                                                                {{ form.description }}
+                                                                {{ form.description.errors }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
                                                                 {{ form.is_active.label_tag }}
                                                                 {{ form.is_active }}
                                                                 {{ form.is_active.errors }}
                                                             </div>
                                                         </div>
+
                                                         <div class="col-md-12 mt-1">
                                                             <div class="form-group text-end">
                                                                 <button type="submit" class="btn btn-secondary">Save

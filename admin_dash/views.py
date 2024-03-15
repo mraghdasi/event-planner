@@ -103,7 +103,7 @@ def edit_room(request, pk):
             messages.error(request, 'Error updating Room. Please check the form.', 'danger')
     else:
         form = RoomForm(instance=room)
-    return render(request, 'admin_dash/edit_room.html', {'form': form})
+    return render(request, 'admin_dash/edit_room.html', {'form': form, 'id': pk})
 
 
 @login_required(login_url='sign_in')
@@ -117,8 +117,18 @@ def add_room(request):
         else:
             messages.error(request, 'Error updating Room. Please check the form.', 'danger')
     else:
-        form = TeamForm()
+        form = RoomForm()
     return render(request, 'admin_dash/add_room.html', {'form': form})
+
+
+@login_required(login_url='sign_in')
+@admin_required
+def delete_room(request, pk):
+    try:
+        Room.objects.get(id=pk).delete()
+        return JsonResponse({}, status=200)
+    except Exception as e:
+        return JsonResponse({'msg': 'Room Not Found!'}, status=400)
 
 
 @login_required(login_url='sign_in')
@@ -134,7 +144,7 @@ def edit_meeting(request, pk):
             messages.error(request, 'Error updating Meeting. Please check the form.', 'danger')
     else:
         form = MeetingForm(instance=meeting)
-    return render(request, 'admin_dash/edit_meeting.html', {'form': form})
+    return render(request, 'admin_dash/edit_meeting.html', {'form': form, 'id': pk})
 
 
 @login_required(login_url='sign_in')

@@ -23,7 +23,7 @@
 
     <nav class="breadcrumb-style-one" aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Admin</a></li>
+            <li class="breadcrumb-item">Admin</li>
             <li class="breadcrumb-item active" aria-current="page">Teams</li>
         </ol>
     </nav>
@@ -56,6 +56,7 @@
             <thead>
             <tr>
                 <th>Title</th>
+                <th>Population</th>
                 <th>Is Active</th>
                 <th>Edit</th>
             </tr>
@@ -64,6 +65,7 @@
             {% for team in teams %}
                 <tr>
                     <td>{{ team.title }}</td>
+                    <td>{{ team.get_population }}</td>
                     <td>{% if team.is_active %}
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -85,8 +87,8 @@
         </table>
     </div>
 
-    
-    
+
+
 {% endblock %}
 
 {% block scripts %}

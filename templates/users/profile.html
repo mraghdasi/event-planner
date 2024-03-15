@@ -47,7 +47,7 @@
 
     <nav class="breadcrumb-style-one" aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Users</a></li>
+            <li class="breadcrumb-item">Users</li>
             <li class="breadcrumb-item active" aria-current="page">Profile</li>
         </ol>
     </nav>
@@ -171,6 +171,12 @@
                                                                 {{ form.phone_number.label_tag }}
                                                                 {{ form.phone_number }}
                                                                 {{ form.phone_number.errors }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="lead">Is Lead:</label>
+                                                                <p id="lead" class="form-control">{{ request.user.is_lead }}</p>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-12 mt-1">

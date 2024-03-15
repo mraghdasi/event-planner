@@ -1,5 +1,6 @@
 from django.shortcuts import redirect
 
+
 def login_required_custom(view_func):
     """
     Decorator for views that checks that the admin is logged in.
@@ -20,7 +21,7 @@ def admin_required(view_func):
     """
 
     def wrapper(request, *args, **kwargs):
-        if request.user.is_superuser:
+        if request.user.is_staff:
             return view_func(request, *args, **kwargs)
         else:
             return redirect('meeting:room_list')
@@ -34,7 +35,7 @@ def admin_or_lead_required(view_func):
     """
 
     def wrapper(request, *args, **kwargs):
-        if request.user.is_superuser or request.user.is_lead:
+        if request.user.is_staff or request.user.is_lead:
             return view_func(request, *args, **kwargs)
         else:
             return redirect('meeting:room_list')

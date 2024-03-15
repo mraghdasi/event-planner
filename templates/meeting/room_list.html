@@ -23,7 +23,7 @@
 
     <nav class="breadcrumb-style-one" aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Main</a></li>
+            <li class="breadcrumb-item">Main</li>
             <li class="breadcrumb-item active" aria-current="page">Example</li>
         </ol>
     </nav>
@@ -36,7 +36,7 @@
         {% for room in rooms %}
             <div class="{{ room.is_active|yesno:'#,tw-opacity-50' }} tw-w-full tw-max-w-sm tw-bg-white tw-border tw-border-gray-200 tw-rounded-lg tw-shadow">
                 <img class="tw-p-5 tw-rounded-t-lg tw-w-full" src="{% static 'image/meeting.webp' %}"
-                     alt="product image"/>
+                     alt="room image"/>
 
                 <div class="tw-px-4 tw-pb-5">
 

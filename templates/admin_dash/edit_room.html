@@ -23,7 +23,7 @@
 
     <nav class="breadcrumb-style-one" aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Admin</a></li>
+            <li class="breadcrumb-item">Admin</li>
             <li class="breadcrumb-item active" aria-current="page">Edit Room</li>
         </ol>
     </nav>
@@ -59,7 +59,8 @@
                                 {% endfor %}
                             </div>
                         {% endif %}
-                        <form class="section general-info" method="post" action="" enctype="multipart/form-data">
+                        <form class="section general-info" method="post" action="{% url 'edit_room' pk=id %}"
+                              enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="info">
                                 <h6 class="">Room Information</h6>
@@ -75,6 +76,24 @@
                                                                 {{ form.title }}
                                                                 <!-- Render title field with label and input -->
                                                                 {{ form.title.errors }}
+                                                                <!-- Render username field errors if any -->
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                {{ form.capacity.label_tag }}
+                                                                {{ form.capacity }}
+                                                                <!-- Render capacity field with label and input -->
+                                                                {{ form.capacity.errors }}
+                                                                <!-- Render username field errors if any -->
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                {{ form.description.label_tag }}
+                                                                {{ form.description }}
+                                                                <!-- Render description field with label and input -->
+                                                                {{ form.description.errors }}
                                                                 <!-- Render username field errors if any -->
                                                             </div>
                                                         </div>
