@@ -89,6 +89,12 @@ class TeamForm(ModelForm):
         model = Team
         fields = ['title', 'is_active']
 
+    def clean_title(self):
+        title = self.cleaned_data['title']
+        if not title.isascii():
+            raise forms.ValidationError('Title should be English')
+        return title
+
 
 class RoomForm(ModelForm):
     def __init__(self, *args, **kwargs):
@@ -101,6 +107,24 @@ class RoomForm(ModelForm):
     class Meta:
         model = Room
         fields = ['title', 'is_active', 'description', 'capacity']
+
+    def clean_capacity(self):
+        capacity = self.cleaned_data['capacity']
+        if int(capacity) < 1:
+            raise forms.ValidationError('Capacity must be 1 or greater')
+        return capacity
+
+    def clean_title(self):
+        title = self.cleaned_data['title']
+        if not title.isascii():
+            raise forms.ValidationError('Title should be English')
+        return title
+
+    def clean_description(self):
+        description = self.cleaned_data['description']
+        if not description.isascii():
+            raise forms.ValidationError('Description should be English')
+        return description
 
 
 class MeetingForm(ModelForm):
@@ -124,29 +148,38 @@ class MeetingForm(ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
+        title = cleaned_data.get('title')
         start_date = cleaned_data.get('start_date')
         end_date = cleaned_data.get('end_date')
         room = cleaned_data.get('room')
         team = cleaned_data.get('team')
 
+        if not title.isascii():
+            self.add_error('title', forms.ValidationError('Title should be English'))
+
         try:
             room = Room.objects.get(title=room)
         except Room.DoesNotExist:
-            raise forms.ValidationError('Room does not exist')
+            self.add_error('room', forms.ValidationError('Room does not exist'))
 
         try:
             team = Team.objects.get(title=team)
         except Team.DoesNotExist:
-            raise forms.ValidationError('Team does not exist')
+            self.add_error('team', forms.ValidationError('Team does not exist'))
 
         if team.get_population() > room.capacity:
-            raise forms.ValidationError('This team has more members than the room capacity.')
+            self.add_error('room', forms.ValidationError('This team has more members than the room capacity.'))
 
         if start_date >= end_date:
-            raise forms.ValidationError("End date must be later than start date")
+            self.add_error('end_date', forms.ValidationError("End date must be later than start date"))
 
-        if start_date < timezone.now() or end_date < timezone.now():
-            raise forms.ValidationError("You can't set a date that is passed (timezone : UTC)")
+        if start_date < timezone.now():
+            self.add_error('start_date',
+                           forms.ValidationError("You can't set a start date that is passed (timezone : UTC)"))
+
+        if end_date < timezone.now():
+            self.add_error('end_date',
+                           forms.ValidationError("You can't set a end date that is passed (timezone : UTC)"))
 
         if start_date and end_date and room:
             overlapping_meetings = Meeting.objects.filter(
@@ -156,7 +189,7 @@ class MeetingForm(ModelForm):
             )
 
             if overlapping_meetings.exists():
-                raise forms.ValidationError(
-                    "The selected time range overlaps with an existing meeting for the chosen room.")
+                raise self.add_error('room', forms.ValidationError(
+                    "The selected time range overlaps with an existing meeting for the chosen room."))
 
         return cleaned_data
