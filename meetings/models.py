@@ -8,7 +8,7 @@ from django.utils import timezone
 class Room(models.Model):
     title = models.CharField(max_length=255, unique=True)
     is_active = models.BooleanField(default=True)
-    capacity = models.IntegerField(default=0)
+    capacity = models.IntegerField(default=1)
     description = models.TextField(null=True, blank=True, max_length=2000)
 
     def avg_rate(self):
