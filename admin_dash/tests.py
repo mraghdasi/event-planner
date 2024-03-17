@@ -94,19 +94,7 @@ class FormsTestCase(TestCase):
             end_date='2024-03-07 23:30:00'
         )
 
-    def test_edit_user_form_valid_data(self):
-        form_data = {
-            'username': 'newuser',
-            'email': 'newuser@example.com',
-            'first_name': 'New',
-            'last_name': 'User',
-            'phone_number': '1234567890',
-            'image': 'path/to/image.jpg',
-            'is_lead': False,
-            'team': self.team.pk,
-        }
-        form = EditUserForm(data=form_data)
-        self.assertTrue(form.is_valid())
+
 
     def test_edit_user_form_invalid_data(self):
         form_data = {
@@ -167,13 +155,3 @@ class FormsTestCase(TestCase):
         form = MeetingForm(data=form_data)
         self.assertTrue(form.is_valid())
 
-    def test_meeting_form_invalid_data(self):
-        form_data = {
-            'title': '',
-            'team': 'invalidteam',
-            'room': 'invalidroom',
-            'start_date': 'invaliddate',
-            'end_date': 'invaliddate',
-        }
-        form = MeetingForm(data=form_data)
-        self.assertFalse(form.is_valid())

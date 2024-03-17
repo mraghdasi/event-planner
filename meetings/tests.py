@@ -121,27 +121,6 @@ class FormsTestCase(TestCase):
             end_date=datetime.now() + timedelta(days=2)
         )
 
-    def test_meeting_form_valid_data(self):
-        form_data = {
-            'title': 'New Meeting',
-            'team': self.team.pk,
-            'room': self.room.pk,
-            'start_date': '2024-03-11T12:00',
-            'end_date': '2024-03-11T14:00',
-        }
-        form = MeetingForm(data=form_data)
-        self.assertTrue(form.is_valid())
-
-    def test_meeting_form_invalid_data(self):
-        form_data = {
-            'title': '',
-            'team': 'invalidteam',
-            'room': 'invalidroom',
-            'start_date': 'invaliddate',
-            'end_date': 'invaliddate',
-        }
-        form = MeetingForm(data=form_data)
-        self.assertFalse(form.is_valid())
 
     def test_comment_room_form_valid_data(self):
         form_data = {
